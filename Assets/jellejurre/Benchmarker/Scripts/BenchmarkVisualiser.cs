@@ -68,7 +68,7 @@ public class BenchmarkVisualiserEditor : Editor
 
 	public static string GetMSLag(double[] vals, int input)
 	{
-		double val = (vals[0] * Math.Pow(input, 2) + vals[1] * input)*1000;
+		double val = (vals[0] * Math.Pow(input, 2) + vals[1] * input + vals[2] - 0.002f)*1000;
 		return ((decimal)val).ToString();
 	}
 	

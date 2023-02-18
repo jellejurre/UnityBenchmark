@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 5f9854d979b94c0794f55d9858848652, type: 3}
   m_Name: SingleStateLayerBenchmark
-  m_EditorClassIdentifier: Assembly-CSharp::SingleStateLayerBenchmark
+  m_EditorClassIdentifier: 
   initializationTime: 1
   benchmarkTime: 1
   iterationCount: 30
-  baseNum: 1.2
+  baseNum: 1.12
   startVal: 20
   prefab: {fileID: 919132149155446097, guid: 1700a058d03ae804e9afd860a62129c1, type: 3}

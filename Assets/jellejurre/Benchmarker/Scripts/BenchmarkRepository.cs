@@ -33,6 +33,9 @@ public class BenchmarkRepository
 		benchmarkTasks.Add(GetOrCreate<TenEmptyLayerBenchmark>("TenEmptyLayerBenchmark.asset"));
 		benchmarkTasks.Add(GetOrCreate<SingleStateLayerBenchmark>("SingleStateLayerBenchmark.asset"));
 		benchmarkTasks.Add(GetOrCreate<TwoStateToggleBenchmark>("TwoStateToggleBenchmark.asset"));
+		benchmarkTasks.Add(GetOrCreate<TenTwoStateToggleBenchmark>("TenTwoStateToggleBenchmark.asset"));
+		benchmarkTasks.Add(GetOrCreate<AnyStateToggleBenchmark>("AnyStateToggleBenchmark.asset"));
+		benchmarkTasks.Add(GetOrCreate<TenAnyStateToggleBenchmark>("TenAnyStateToggleBenchmark.asset"));
 		benchmarkTasks.Add(GetOrCreate<ConstraintBenchmark>("ParentConstraintBenchmark.asset"));
 	}
 	

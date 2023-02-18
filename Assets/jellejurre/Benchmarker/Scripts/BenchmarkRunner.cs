@@ -23,6 +23,10 @@ public class BenchmarkRunner : MonoBehaviour
 		{
 			this.data[i] = new LinkedList<float>();
 		}
+
+		GameObject camera = new GameObject("Camera", new []{typeof(Camera)});
+		camera.transform.position = new Vector3(0, 0, -10);
+		camera.transform.rotation = Quaternion.Euler(0, 0, 0);
 		SetupIteration();
 	}
 
@@ -38,7 +42,7 @@ public class BenchmarkRunner : MonoBehaviour
 		{
 			prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/jellejurre/Benchmarker/Assets/Prefabs/Cube.prefab");
 		}
-
+		
 		currentObject = task.PrepareIteration(prefab, task.GetIterationNumber(currentIteration));
 	}
 

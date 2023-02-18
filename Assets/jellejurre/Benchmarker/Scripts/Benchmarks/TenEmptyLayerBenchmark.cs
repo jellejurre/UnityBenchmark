@@ -21,6 +21,7 @@ public class TenEmptyLayerBenchmark : BenchmarkTask
 				AnimatorState state = new AnimatorState();
 				stateMachine.AddState(state, Vector3.one);
 				layer.stateMachine = stateMachine;
+				layer.defaultWeight = 1;
 				layers[j] = layer;
 			}
 			controller.layers = layers;
