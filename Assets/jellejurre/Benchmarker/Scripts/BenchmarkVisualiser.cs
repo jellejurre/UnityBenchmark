@@ -22,7 +22,8 @@ public class BenchmarkVisualiser : MonoBehaviour
 [CustomEditor(typeof(BenchmarkVisualiser))]
 public class BenchmarkVisualiserEditor : Editor
 {
-	private int inputNumber;
+	private int inputNumber1;
+	private int inputNumber2;
 	public override void OnInspectorGUI()
 	{
 		if (target == null)
@@ -49,27 +50,54 @@ public class BenchmarkVisualiserEditor : Editor
 		TextAsset text = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/jellejurre/Benchmarker/Output/Data/"+visualiser.textAsset.name+".txt");
 		if (text != null)
 		{
-			int oldNumber = inputNumber;
-			int newNumber;
-			FitLabel("Iteration Count");
-			if (int.TryParse(EditorGUILayout.TextField(inputNumber.ToString()), out newNumber))
+			int oldNumber1 = inputNumber1;
+			int newNumber1;
+			FitLabel("x Input");
+			if (int.TryParse(EditorGUILayout.TextField(inputNumber1.ToString()), out newNumber1))
 			{
-				if (oldNumber != newNumber)
+				if (oldNumber1 != newNumber1)
 				{
-					inputNumber = newNumber;
+					inputNumber1 = newNumber1;
 				}
 			}
 
+			if (text.text.Split(',').Length > 3)
+			{
+				GUILayout.Space(10);
+				int oldNumber2 = inputNumber2;
+				int newNumber2;
+				FitLabel("y Input");
+				if (int.TryParse(EditorGUILayout.TextField(inputNumber2.ToString()), out newNumber2))
+				{
+					if (oldNumber2 != newNumber2)
+					{
+						inputNumber2 = newNumber2;
+					}
+				}
+			}
+			
 			GUILayout.Space(10);
-			FitLabel("Ms lag caused: " + GetMSLag(text.text.Split(',').Select(x => double.Parse(x)).ToArray(), inputNumber));
+			FitLabel("Ms lag caused: " + GetMSLag(text.text.Split(',').Select(x => double.Parse(x)).ToArray()));
 		}
 		GUILayout.EndHorizontal();
 	}
 
-	public static string GetMSLag(double[] vals, int input)
+	public string GetMSLag(double[] vals)
 	{
-		double val = (vals[0] * Math.Pow(input, 2) + vals[1] * input + vals[2] - 0.002f)*1000;
-		return ((decimal)val).ToString();
+		if (vals.Length == 3)
+		{
+			double val = (vals[0] * Math.Pow(inputNumber1, 2) + vals[1] * inputNumber1);//+ vals[2] - 0.0018f);
+			return ((decimal)val * 1000).ToString();
+		}
+		else
+		{
+			int x = inputNumber1;
+			int y = inputNumber2;
+			double val = vals[1] * y + vals[2] * Math.Pow(y, 2) +
+			             vals[3] * x + vals[4] * x * y + vals[5] * x * Math.Pow(y, 2) + 
+			             vals[6] * Math.Pow(x, 2) + vals[7] * Math.Pow(x, 2)*y + vals[8] *Math.Pow(x, 2) * Math.Pow(y, 2);
+			return ((decimal)val * 1000).ToString();
+		}
 	}
 	
 	public static void FitLabel(string text)

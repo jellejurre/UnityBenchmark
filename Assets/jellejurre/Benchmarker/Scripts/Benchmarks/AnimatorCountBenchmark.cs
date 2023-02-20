@@ -2,9 +2,9 @@
 using UnityEditor.Animations;
 using UnityEngine;
 
-public class AnimatorCountBenchmark : BenchmarkTask
+public class AnimatorCountBenchmark : BenchmarkTask1d
 {
-	public override GameObject PrepareIteration(GameObject prefab, int iterationNum)
+	public override GameObject PrepareIteration1d(GameObject prefab, int iterationNum)
 	{
 		GameObject root = new GameObject();
 		for (int i = 0; i < iterationNum; i++)
@@ -23,6 +23,11 @@ public class AnimatorCountBenchmark : BenchmarkTask
 			animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
 		}
 		return root;
+	}
+	
+	public override string GetParameterName()
+	{
+		return "Animators";
 	}
 
 	public override string GetName()

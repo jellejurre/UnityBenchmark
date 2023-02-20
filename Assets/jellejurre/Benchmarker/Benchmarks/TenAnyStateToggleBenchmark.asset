@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4de6c1d200d2464e9fd9366ad756dda3, type: 3}
   m_Name: TenAnyStateToggleBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 1
-  benchmarkTime: 1
+  initializationTime: 10
+  benchmarkTime: 10
   iterationCount: 25
   baseNum: 1.1
   startVal: 20

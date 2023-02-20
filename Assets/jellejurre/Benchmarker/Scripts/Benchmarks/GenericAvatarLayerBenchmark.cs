@@ -2,9 +2,9 @@
 using UnityEditor.Animations;
 using UnityEngine;
 
-public class GenericAvatarLayerBenchmark : BenchmarkTask
+public class GenericAvatarLayerBenchmark : BenchmarkTask1d
 {
-	public override GameObject PrepareIteration(GameObject prefab, int iterationNum)
+	public override GameObject PrepareIteration1d(GameObject prefab, int iterationNum)
 	{
 		GameObject gameObject = Instantiate(prefab);
 		Animator animator = gameObject.GetOrAddComponent<Animator>();
@@ -24,6 +24,11 @@ public class GenericAvatarLayerBenchmark : BenchmarkTask
 		animator.runtimeAnimatorController = controller;
 		animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
 		return gameObject;
+	}
+	
+	public override string GetParameterName()
+	{
+		return "Layers";
 	}
 
 	public override string GetName()

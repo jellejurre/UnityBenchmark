@@ -6,9 +6,9 @@ using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class ConstraintBenchmark : BenchmarkTask
+public class ParentConstraintBenchmark : BenchmarkTask1d
 {
-	public override GameObject PrepareIteration(GameObject prefab, int iterationNum)
+	public override GameObject PrepareIteration1d(GameObject prefab, int iterationNum)
 	{
 		GameObject gameObject = Instantiate(prefab);
 		for (int i = 0; i < iterationNum; i++)
@@ -26,7 +26,12 @@ public class ConstraintBenchmark : BenchmarkTask
 		AssetDatabase.SaveAssets();
 		return gameObject;
 	}
-
+	
+	public override string GetParameterName()
+	{
+		return "Parent Constraints";
+	}
+	
 	public override string GetName()
 	{
 		return "ParentConstraint";

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db4e473539f04838887386f918ecd7ad, type: 3}
   m_Name: TenTwoStateToggleBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 1
-  benchmarkTime: 1
+  initializationTime: 10
+  benchmarkTime: 10
   iterationCount: 25
   baseNum: 1.1
   startVal: 20

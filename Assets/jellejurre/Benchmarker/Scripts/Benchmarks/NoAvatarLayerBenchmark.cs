@@ -2,9 +2,9 @@
 using UnityEditor.Animations;
 using UnityEngine;
 
-public class NoAvatarLayerBenchmark : BenchmarkTask
+public class NoAvatarLayerBenchmark : BenchmarkTask1d
 {
-	public override GameObject PrepareIteration(GameObject prefab, int iterationNum)
+	public override GameObject PrepareIteration1d(GameObject prefab, int iterationNum)
 	{
 		GameObject gameObject = Instantiate(prefab);
 		Animator animator = gameObject.GetOrAddComponent<Animator>();
@@ -27,6 +27,11 @@ public class NoAvatarLayerBenchmark : BenchmarkTask
 		return gameObject;
 	}
 
+	public override string GetParameterName()
+	{
+		return "Layers";
+	}
+	
 	public override string GetName()
 	{
 		return "NoAvatar";

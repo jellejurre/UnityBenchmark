@@ -2,9 +2,9 @@
 using UnityEditor.Animations;
 using UnityEngine;
 
-public class SingleStateLayerBenchmark : BenchmarkTask
+public class SingleStateLayerBenchmark : BenchmarkTask1d
 {
-	public override GameObject PrepareIteration(GameObject prefab, int iterationNum)
+	public override GameObject PrepareIteration1d(GameObject prefab, int iterationNum)
 	{
 		GameObject gameObject = Instantiate(prefab);
 		Animator animator = gameObject.GetOrAddComponent<Animator>();
@@ -25,6 +25,11 @@ public class SingleStateLayerBenchmark : BenchmarkTask
 		return gameObject;
 	}
 
+	public override string GetParameterName()
+	{
+		return "Layers";
+	}
+	
 	public override string GetName()
 	{
 		return "SingleStateLayer";

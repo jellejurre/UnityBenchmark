@@ -18,8 +18,8 @@ public class BenchmarkRunner : MonoBehaviour
 
 	private void Start()
 	{
-		this.data = new LinkedList<float>[task.iterationCount];
-		for (int i = 0; i < task.iterationCount; i++)
+		this.data = new LinkedList<float>[task.GetMaxIterations()];
+		for (int i = 0; i < task.GetMaxIterations(); i++)
 		{
 			this.data[i] = new LinkedList<float>();
 		}
@@ -42,8 +42,8 @@ public class BenchmarkRunner : MonoBehaviour
 		{
 			prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/jellejurre/Benchmarker/Assets/Prefabs/Cube.prefab");
 		}
-		
-		currentObject = task.PrepareIteration(prefab, task.GetIterationNumber(currentIteration));
+
+		currentObject = task.PrepareIteration(prefab, currentIteration);
 	}
 
 	private void Update()
@@ -68,7 +68,7 @@ public class BenchmarkRunner : MonoBehaviour
 		if (totalRunTime >= task.initializationTime + task.benchmarkTime)
 		{
 			currentIteration++;
-			if (currentIteration == task.iterationCount)
+			if (currentIteration == task.GetMaxIterations())
 			{
 				gameObject.SetActive(false);
 				BenchmarkManager.ProcessBenchmarkData(new BenchmarkData(data));

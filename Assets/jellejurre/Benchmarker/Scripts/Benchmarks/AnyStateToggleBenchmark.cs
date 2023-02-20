@@ -5,9 +5,9 @@ using UnityEditor.Animations;
 using UnityEditor.VersionControl;
 using UnityEngine;
 
-public class AnyStateToggleBenchmark : BenchmarkTask
+public class AnyStateToggleBenchmark : BenchmarkTask1d
 {
-	public override GameObject PrepareIteration(GameObject prefab, int iterationNum)
+	public override GameObject PrepareIteration1d(GameObject prefab, int iterationNum)
 	{
 		GameObject gameObject = Instantiate(prefab);
 		Animator animator = gameObject.GetOrAddComponent<Animator>();
@@ -55,6 +55,11 @@ public class AnyStateToggleBenchmark : BenchmarkTask
 		animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
 		AssetDatabase.SaveAssets();
 		return gameObject;
+	}
+	
+	public override string GetParameterName()
+	{
+		return "Layers";
 	}
 
 	public override string GetName()

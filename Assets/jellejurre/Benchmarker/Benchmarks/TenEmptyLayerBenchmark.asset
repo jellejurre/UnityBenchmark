@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b78b29e002f4b95932ad1149c30628c, type: 3}
   m_Name: TenEmptyLayerBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 1
-  benchmarkTime: 1
+  initializationTime: 10
+  benchmarkTime: 10
   iterationCount: 30
   baseNum: 1.12
   startVal: 20

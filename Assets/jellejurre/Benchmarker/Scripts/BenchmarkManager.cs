@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -9,6 +10,8 @@ using Object = UnityEngine.Object;
 
 public class BenchmarkManager
 {
+	public static bool runAll = false;
+	
 	private static string oldSceneName;
 	private static string lastSelectedObjectPath;
 
@@ -21,7 +24,7 @@ public class BenchmarkManager
 		EditorBuildSettings.scenes = EditorBuildSettings.scenes.Append(new EditorBuildSettingsScene("Assets/jellejurre/Benchmarker/Assets/BenchmarkScene.unity", true)).ToArray();
 	}
 
-	public static void Run(BenchmarkTask task)
+	public static void LoadSceneAndRun(BenchmarkTask task)
 	{
 		currentTask = task;
 		currentPrefab = task.prefab;
@@ -44,6 +47,12 @@ public class BenchmarkManager
 		}
 	}
 
+	public static void RunAll()
+	{
+		runAll = true;
+		LoadSceneAndRun(BenchmarkRepository.BenchmarkTasks.First());
+	}
+	
 	public static void RunBenchmark(Scene s1, Scene s2)
 	{
 		if (s2.name != "BenchmarkScene")
@@ -60,18 +69,30 @@ public class BenchmarkManager
 
 	public static void ProcessBenchmarkData(BenchmarkData data)
 	{
-		string s = "";
-		for (var i = 0; i < data.frameTimes.Length; i++)
+		string[] debug = currentTask.FormatDebug(data);
+		foreach (var s in debug)
 		{
-			Debug.Log($"Iteration: {i}, Amount: {currentTask.GetIterationNumber(i)}, Average FrameTime: {data.frameTimes[i].Average()}");
-			s += $"{currentTask.GetIterationNumber(i)},{data.frameTimes[i].Average()}\n";
+			Debug.Log(s);
 		}
+		string[] results = currentTask.FormatResults(data);
 		StreamWriter writer = new StreamWriter($"Assets/jellejurre/Benchmarker/Output/{currentTask.GetName()}.txt");
-		writer.Write(s);
+		writer.Write(String.Join("\n", results));
 		writer.Flush();
 		writer.Close();
 		AssetDatabase.SaveAssets();
 		SceneManager.LoadScene(oldSceneName, LoadSceneMode.Single);
+		if (runAll)
+		{
+			int index = BenchmarkRepository.BenchmarkTasks.IndexOf(currentTask);
+			if (index == BenchmarkRepository.BenchmarkTasks.Count - 1)
+			{
+				runAll = false;
+			}
+			else
+			{
+				LoadSceneAndRun(BenchmarkRepository.BenchmarkTasks[index + 1]);
+			}
+		}
 	}
 	
 	public static void SelectOldObject(Scene s1, Scene s2)

@@ -30,13 +30,14 @@ public class BenchmarkRepository
 		benchmarkTasks.Add(GetOrCreate<NoAvatarLayerBenchmark>("NoRigLayerBenchmark.asset"));
 		benchmarkTasks.Add(GetOrCreate<GenericAvatarLayerBenchmark>("GenericLayerBenchmark.asset"));
 		benchmarkTasks.Add(GetOrCreate<EmptyLayerBenchmark>("EmptyLayerBenchmark.asset"));
-		benchmarkTasks.Add(GetOrCreate<TenEmptyLayerBenchmark>("TenEmptyLayerBenchmark.asset"));
 		benchmarkTasks.Add(GetOrCreate<SingleStateLayerBenchmark>("SingleStateLayerBenchmark.asset"));
 		benchmarkTasks.Add(GetOrCreate<TwoStateToggleBenchmark>("TwoStateToggleBenchmark.asset"));
-		benchmarkTasks.Add(GetOrCreate<TenTwoStateToggleBenchmark>("TenTwoStateToggleBenchmark.asset"));
+		benchmarkTasks.Add(GetOrCreate<TwoStateToggle2dBenchmark>("TwoStateToggle2dBenchmark.asset"));
 		benchmarkTasks.Add(GetOrCreate<AnyStateToggleBenchmark>("AnyStateToggleBenchmark.asset"));
-		benchmarkTasks.Add(GetOrCreate<TenAnyStateToggleBenchmark>("TenAnyStateToggleBenchmark.asset"));
-		benchmarkTasks.Add(GetOrCreate<ConstraintBenchmark>("ParentConstraintBenchmark.asset"));
+		benchmarkTasks.Add(GetOrCreate<AnyStateToggle2dBenchmark>("AnyStateToggle2dBenchmark.asset"));
+		benchmarkTasks.Add(GetOrCreate<ParentConstraintBenchmark>("ParentConstraintBenchmark.asset"));
+		benchmarkTasks.Add(GetOrCreate<ParentConstraintSourcesBenchmark>("ParentConstraintSourcesBenchmark.asset"));
+		benchmarkTasks.Add(GetOrCreate<ParentConstraint2dBenchmark>("ParentConstraint2dBenchmark.asset"));
 	}
 	
 	static T GetOrCreate<T>(string location) where T : ScriptableObject

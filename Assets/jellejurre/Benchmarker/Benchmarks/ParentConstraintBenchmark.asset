@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb5cc3e3295470f8bcba95c9c125220, type: 3}
   m_Name: ParentConstraintBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 1
-  benchmarkTime: 1
-  iterationCount: 50
-  baseNum: 1.1
-  startVal: 20
+  initializationTime: 5
+  benchmarkTime: 5
+  iterationCount: 100
+  baseNum: 1.07
+  startVal: 2
   prefab: {fileID: 6875639689166666862, guid: 881d31bded165484dbb2097d1dd64069, type: 3}
