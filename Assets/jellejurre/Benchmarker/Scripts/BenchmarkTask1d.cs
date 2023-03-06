@@ -45,43 +45,44 @@ public abstract class BenchmarkTask1d : BenchmarkTask
 	public override void Visualise()
 	{
 		BenchmarkTask task = this;
-		GUILayout.BeginVertical(GUI.skin.box);
-		GUILayout.BeginHorizontal();
-		using (new BenchmarkerEditor.FieldWidth(10f))
+		using (new EditorGUILayout.VerticalScope(GUI.skin.box))
 		{
-			BenchmarkerEditor.FitLabel("Name: " + task.GetName());
-			GUILayout.Space(10f);
-			VisualiseFloatField(ref task.initializationTime, "Initialization Time");
-			GUILayout.Space(5f);
-			VisualiseFloatField(ref task.benchmarkTime, "Benchmark Time");
-			GUILayout.Space(5f);
-			VisualiseIntField(ref task.iterationCount, "Iteration Count");
-			if (GUILayout.Button("Run"))
+			GUILayout.BeginHorizontal();
+			using (new BenchmarkerEditor.FieldWidth(10f))
 			{
-				BenchmarkManager.LoadSceneAndRun(task);
+				BenchmarkerEditor.FitLabel("Name: " + task.GetName());
+				GUILayout.Space(10f);
+				VisualiseFloatField(ref task.initializationTime, "Initialization Time");
+				GUILayout.Space(5f);
+				VisualiseFloatField(ref task.benchmarkTime, "Benchmark Time");
+				GUILayout.Space(5f);
+				VisualiseIntField(ref task.iterationCount, "Iteration Count");
+				if (GUILayout.Button("Run"))
+				{
+					BenchmarkManager.LoadSceneAndRun(task);
+				}
 			}
-		}
-		GUILayout.EndHorizontal();
-		
-		GUILayout.BeginHorizontal();
-		using (new BenchmarkerEditor.FieldWidth(20f))
-		{
-			VisualiseFloatField(ref task.baseNum, "Exponential Base", 50);
-			GUILayout.Space(10f);
-			VisualiseIntField(ref task.startVal, "Starting Value", 50);
-			GUILayout.Space(10f);
-			BenchmarkerEditor.FitLabel("Prefab");
-			GameObject newPrefab = (GameObject)EditorGUILayout.ObjectField(task.prefab, typeof(GameObject), false, Array.Empty<GUILayoutOption>());
-			if (newPrefab != task.prefab)
+			GUILayout.EndHorizontal();
+			
+			GUILayout.BeginHorizontal();
+			using (new BenchmarkerEditor.FieldWidth(20f))
 			{
-				task.prefab = newPrefab;
-				AssetDatabase.SaveAssets();
+				VisualiseFloatField(ref task.baseNum, "Exponential Base", 50);
+				GUILayout.Space(10f);
+				VisualiseIntField(ref task.startVal, "Starting Value", 50);
+				GUILayout.Space(10f);
+				BenchmarkerEditor.FitLabel("Prefab");
+				GameObject newPrefab = (GameObject)EditorGUILayout.ObjectField(task.prefab, typeof(GameObject), false, Array.Empty<GUILayoutOption>());
+				if (newPrefab != task.prefab)
+				{
+					task.prefab = newPrefab;
+					AssetDatabase.SaveAssets();
+				}
 			}
+			GUILayout.EndHorizontal();
+			GUILayout.BeginHorizontal();
+			BenchmarkerEditor.FitLabel(task.GetDescription());
+			GUILayout.EndHorizontal();
 		}
-		GUILayout.EndHorizontal();
-		GUILayout.BeginHorizontal();
-		BenchmarkerEditor.FitLabel(task.GetDescription());
-		GUILayout.EndHorizontal();
-		GUILayout.EndVertical();
 	}
 }

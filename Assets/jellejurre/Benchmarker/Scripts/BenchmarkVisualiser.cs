@@ -11,10 +11,10 @@ using UnityEngine;
 public class BenchmarkVisualiser : MonoBehaviour
 {
 	public TextAsset textAsset;
-
+	public bool drawFittedLine;
 	public void Visualise()
 	{
-		Process.Start("python.exe", "Assets/jellejurre/Benchmarker/Scripts/draw.py " + textAsset.name);
+		Process.Start("python.exe", "Assets/jellejurre/Benchmarker/Scripts/draw.py " + textAsset.name + " "+ (drawFittedLine ? "True" : "False"));
 	}
 }
 
@@ -33,13 +33,13 @@ public class BenchmarkVisualiserEditor : Editor
 		
 		BenchmarkVisualiser visualiser = (BenchmarkVisualiser)target;
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("textAsset"));
+		visualiser.drawFittedLine = GUILayout.Toggle(visualiser.drawFittedLine, "Visualise Fitted Line");
 
 		if (GUILayout.Button("Update Visualisation"))
 		{
 			visualiser.Visualise();
 		}
 		serializedObject.ApplyModifiedProperties();
-
 		Texture image = AssetDatabase.LoadAssetAtPath<Texture>("Assets/jellejurre/Benchmarker/Output/Graphs/"+visualiser.textAsset.name+".png");
 		if (image != null)
 		{

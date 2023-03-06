@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d1dc0c859b443db2790499d063bcb9, type: 3}
+  m_Name: ContactSendReceiv2dBenchmark
+  m_EditorClassIdentifier: 
+  initializationTime: 2
+  benchmarkTime: 4
+  iterationCount: 10
+  baseNum: 1.5
+  startVal: 10
+  prefab: {fileID: 0}
+  baseNum2: 1.5
+  startVal2: 10

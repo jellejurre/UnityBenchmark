@@ -14,7 +14,7 @@ public class BenchmarkRunner : MonoBehaviour
 	public int currentIteration;
 	public GameObject currentObject;
 
-	public bool restart = false;
+	private bool restart = false;
 
 	private void Start()
 	{

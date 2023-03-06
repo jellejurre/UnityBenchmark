@@ -5,12 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 public class BenchmarkInterface : MonoBehaviour
-{
-	[SerializeField]
-	public List<BenchmarkTask> tasks;
-
-	public bool runContinuous = false;
-}
+{ }
 
 [CustomEditor(typeof(BenchmarkInterface))]
 public class BenchmarkerEditor : Editor
@@ -30,11 +25,11 @@ public class BenchmarkerEditor : Editor
 
 		BenchmarkInterface benchmarkInterface = (BenchmarkInterface)target;
 
-		if (benchmarkInterface.tasks == null)
-		{
-			benchmarkInterface.tasks = BenchmarkRepository.BenchmarkTasks;
-			serializedObject.Update();
-		}
+		// if (benchmarkInterface.tasks == null)
+		// {
+		// 	benchmarkInterface.tasks = BenchmarkRepository.BenchmarkTasks;
+		// 	serializedObject.Update();
+		// }
 
 		bool runAll = GUILayout.Button("Run All Benchmarks");
 		if (runAll)
@@ -44,8 +39,12 @@ public class BenchmarkerEditor : Editor
 
 		for (var i = 0; i < BenchmarkRepository.BenchmarkTasks.Count; i++)
 		{
-			var task = BenchmarkRepository.BenchmarkTasks[i];
-			task.Visualise();
+			var taskGroup = BenchmarkRepository.BenchmarkTasks[i];
+			taskGroup.shown = EditorGUILayout.Foldout(taskGroup.shown, taskGroup.name);
+			if (taskGroup.shown)
+			{
+				taskGroup.Visualise();
+			}
 		}
 	}
 	

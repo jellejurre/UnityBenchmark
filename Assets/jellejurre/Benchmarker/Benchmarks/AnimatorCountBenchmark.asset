@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2947db255a4b8b8bf123c9c86d2831, type: 3}
   m_Name: AnimatorCountBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 10
-  benchmarkTime: 10
+  initializationTime: 4
+  benchmarkTime: 4
   iterationCount: 30
   baseNum: 1.2
   startVal: 10

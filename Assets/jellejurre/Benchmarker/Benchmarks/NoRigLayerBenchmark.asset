@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 849b6e4891ef4803b9290ab0bb6286df, type: 3}
   m_Name: NoRigLayerBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 10
-  benchmarkTime: 10
+  initializationTime: 4
+  benchmarkTime: 4
   iterationCount: 30
   baseNum: 1.12
   startVal: 20

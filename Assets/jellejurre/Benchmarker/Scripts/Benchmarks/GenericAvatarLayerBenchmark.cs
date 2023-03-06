@@ -8,19 +8,7 @@ public class GenericAvatarLayerBenchmark : BenchmarkTask1d
 	{
 		GameObject gameObject = Instantiate(prefab);
 		Animator animator = gameObject.GetOrAddComponent<Animator>();
-		AnimatorController controller = new AnimatorController();
-		AnimatorControllerLayer[] layers = new AnimatorControllerLayer[iterationNum];
-		for (int i = 0; i < layers.Length; i++)
-		{
-			AnimatorControllerLayer layer = new AnimatorControllerLayer();
-			layer.name = i.ToString();
-			AnimatorStateMachine stateMachine = new AnimatorStateMachine();
-			AnimatorState state = new AnimatorState();
-			stateMachine.AddState(state, Vector3.one);
-			layer.stateMachine = stateMachine;
-			layers[i] = layer;
-		}
-		controller.layers = layers;
+		AnimatorController controller = AnimatorHelpers.SetupTwoToggles(iterationNum);
 		animator.runtimeAnimatorController = controller;
 		animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
 		return gameObject;
@@ -38,6 +26,6 @@ public class GenericAvatarLayerBenchmark : BenchmarkTask1d
 	
 	public override string GetDescription()
 	{
-		return "Benchmarks empty layer count on generic avatar";
+		return "Benchmarks two state toggle layer count on generic avatar";
 	}
 }

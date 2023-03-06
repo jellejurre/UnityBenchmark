@@ -68,7 +68,8 @@ if len(names) == 1:
     vars = np.polyfit(xs, ys, 2)
     x = np.linspace(min(xs),max(xs),1000)
     y = [np.polyval(vars, i) for i in x]
-    plt.plot(x, y)
+    if(sys.argv[2] == "True"):
+        plt.plot(x, y)
     plt.xlabel(names[0])
     plt.ylabel("Time in seconds")
     vars = ["{:.3E}".format(var) for var in vars]
@@ -98,7 +99,8 @@ else:
     for i in range(len(ys)):
         z[x1dis.tolist().index(x1s[i]),x2dis.tolist().index(x2s[i])] = ys[i]
    
-    plt.contour(x1dis, x2dis, z.T)
+    if (sys.argv[2]=="True"):
+        plt.contour(x1dis, x2dis, z.T)
     plt.rcParams["axes.titlesize"] = 10
     plt.title(f"Fitted Curve: {vars[0]} + {vars[1]}y + {vars[2]}y^2 + {vars[3]}x + {vars[4]}x*y + {vars[5]}x*y^2 + {vars[6]}x^2 + {vars[7]}x^2*y + {vars[8]}x^2 * y^2", wrap=True)
     plt.savefig("Assets/jellejurre/Benchmarker/Output/Graphs/" + sys.argv[1] + ".png")

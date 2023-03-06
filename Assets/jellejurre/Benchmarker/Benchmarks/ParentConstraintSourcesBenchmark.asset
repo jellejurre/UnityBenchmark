@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393593f3f8014054b6961eaa7261e13d, type: 3}
   m_Name: ParentConstraintSourcesBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 5
-  benchmarkTime: 5
+  initializationTime: 4
+  benchmarkTime: 4
   iterationCount: 100
   baseNum: 1.08
   startVal: 2

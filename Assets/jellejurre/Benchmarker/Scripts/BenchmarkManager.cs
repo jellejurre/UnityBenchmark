@@ -11,6 +11,7 @@ using Object = UnityEngine.Object;
 public class BenchmarkManager
 {
 	public static bool runAll = false;
+	public static BenchmarkTaskGroup currentRunGroup;
 	
 	private static string oldSceneName;
 	private static string lastSelectedObjectPath;
@@ -28,9 +29,12 @@ public class BenchmarkManager
 	{
 		currentTask = task;
 		currentPrefab = task.prefab;
-		Scene oldScene = SceneManager.GetActiveScene(); 
-		oldSceneName = oldScene.name;
-		lastSelectedObjectPath = GetGameObjectPath(Selection.activeGameObject);
+		Scene oldScene = SceneManager.GetActiveScene();
+		if (oldScene.name != "BenchmarkScene")
+		{
+			oldSceneName = oldScene.name;
+			lastSelectedObjectPath = GetGameObjectPath(Selection.activeGameObject);
+		}
 		if (oldScene.isDirty)
 		{
 			Debug.LogError("Can't run benchmark with unsaved scene. Please save your scene before running.");
@@ -50,7 +54,13 @@ public class BenchmarkManager
 	public static void RunAll()
 	{
 		runAll = true;
-		LoadSceneAndRun(BenchmarkRepository.BenchmarkTasks.First());
+		LoadSceneAndRun(BenchmarkRepository.BenchmarkTasks.First().tasks.First());
+	}
+
+	public static void RunCategory(BenchmarkTaskGroup group)
+	{
+		currentRunGroup = group;
+		LoadSceneAndRun(currentRunGroup.tasks.First());
 	}
 	
 	public static void RunBenchmark(Scene s1, Scene s2)
@@ -81,17 +91,29 @@ public class BenchmarkManager
 		writer.Close();
 		AssetDatabase.SaveAssets();
 		SceneManager.LoadScene(oldSceneName, LoadSceneMode.Single);
-		if (runAll)
+		if (currentRunGroup != null)
 		{
-			int index = BenchmarkRepository.BenchmarkTasks.IndexOf(currentTask);
-			if (index == BenchmarkRepository.BenchmarkTasks.Count - 1)
+			int index = Array.IndexOf(currentRunGroup.tasks, currentTask);
+			if (index == currentRunGroup.tasks.Length - 1)
 			{
-				runAll = false;
+				currentRunGroup = null;
+				return;
 			}
 			else
 			{
-				LoadSceneAndRun(BenchmarkRepository.BenchmarkTasks[index + 1]);
+				currentTask = currentRunGroup.tasks[index + 1];
+				LoadSceneAndRun(currentTask);
 			}
+		}
+		if (runAll)
+		{
+			BenchmarkTask nextTask = BenchmarkRepository.GetNext(currentTask);
+			if (nextTask == null)
+			{
+				runAll = false;
+				return;
+			}
+			LoadSceneAndRun(nextTask);
 		}
 	}
 	

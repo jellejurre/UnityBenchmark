@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37de81f640d248f490a16ac18692a20a, type: 3}
   m_Name: TestBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 10
-  benchmarkTime: 10
-  iterationCount: 30
+  initializationTime: 1
+  benchmarkTime: 1
+  iterationCount: 5
   baseNum: 1.12
   startVal: 20
   prefab: {fileID: 0}

@@ -12,10 +12,16 @@ public class SingleStateLayerBenchmark : BenchmarkTask1d
 		AnimatorControllerLayer[] layers = new AnimatorControllerLayer[iterationNum];
 		for (int i = 0; i < layers.Length; i++)
 		{
+			GameObject toggleObject = new GameObject("test"+i);
+			toggleObject.transform.SetParent(gameObject.transform);
 			AnimatorControllerLayer layer = new AnimatorControllerLayer();
 			layer.name = i.ToString();
+			layer.defaultWeight = 1;
 			AnimatorStateMachine stateMachine = new AnimatorStateMachine();
-			stateMachine.AddState(new AnimatorState(), Vector3.one);
+			AnimatorState state = new AnimatorState();
+			AnimationClip offAnim = AnimationHelper.GetOrCreateOneStateToggle("test"+i, i);
+			state.motion = offAnim;
+			stateMachine.AddState(state, Vector3.one);
 			layer.stateMachine = stateMachine;
 			layers[i] = layer;
 		}
