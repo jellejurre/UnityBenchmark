@@ -57,7 +57,7 @@ def polyfit2d(x, y, z, kx=3, ky=3, order=None):
     # do leastsq fitting and return leastsq result
     return np.linalg.lstsq(a.T, np.ravel(z), rcond=None)
 
-f = open("Assets/jellejurre/Benchmarker/Output/" + sys.argv[1] + ".txt", "r")
+f = open("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/"+ sys.argv[1] + ".txt", "r")
 lines = f.readlines()
 names = lines[0].split(",") 
 lines.pop(0)
@@ -68,15 +68,16 @@ if len(names) == 1:
     vars = np.polyfit(xs, ys, 2)
     x = np.linspace(min(xs),max(xs),1000)
     y = [np.polyval(vars, i) for i in x]
-    if(sys.argv[2] == "True"):
+    if(sys.argv[3] == "True"):
         plt.plot(x, y)
     plt.xlabel(names[0])
     plt.ylabel("Time in seconds")
     vars = ["{:.3E}".format(var) for var in vars]
     plt.title(f"Fitted Curve: {vars[0]}x^2 + {vars[1]}x + {vars[2]}")
-    plt.savefig("Assets/jellejurre/Benchmarker/Output/Graphs/" + sys.argv[1] + ".png")
-    f = open("Assets/jellejurre/Benchmarker/Output/Data/" + sys.argv[1] + ".txt", "w")
+    plt.savefig("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Graphs/" + sys.argv[1] + ".png")
+    f = open("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Data/" + sys.argv[1] + ".txt", "w")
     f.write(f"{vars[0]},{vars[1]},{vars[2]}")
+    f.close()
 else: 
     x1s = np.array([int(spl.split(",")[0]) for spl in lines])
     x2s = np.array([int(spl.split(",")[1]) for spl in lines])
@@ -90,7 +91,7 @@ else:
     plt.xlabel(names[0])
     plt.ylabel(names[1])
     vars = ["{:.3E}".format(var) for var in coeff]
-    f = open("Assets/jellejurre/Benchmarker/Output/Data/" + sys.argv[1] + ".txt", "w")
+    f = open("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Data/" + sys.argv[1] + ".txt", "w")
     f.write(",".join(vars))
     f.close()
     x1dis = np.unique(x1s)
@@ -99,8 +100,8 @@ else:
     for i in range(len(ys)):
         z[x1dis.tolist().index(x1s[i]),x2dis.tolist().index(x2s[i])] = ys[i]
    
-    if (sys.argv[2]=="True"):
+    if (sys.argv[3]=="True"):
         plt.contour(x1dis, x2dis, z.T)
     plt.rcParams["axes.titlesize"] = 10
     plt.title(f"Fitted Curve: {vars[0]} + {vars[1]}y + {vars[2]}y^2 + {vars[3]}x + {vars[4]}x*y + {vars[5]}x*y^2 + {vars[6]}x^2 + {vars[7]}x^2*y + {vars[8]}x^2 * y^2", wrap=True)
-    plt.savefig("Assets/jellejurre/Benchmarker/Output/Graphs/" + sys.argv[1] + ".png")
+    plt.savefig("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Graphs/" + sys.argv[1] + ".png")

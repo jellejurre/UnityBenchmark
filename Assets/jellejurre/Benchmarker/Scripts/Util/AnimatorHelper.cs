@@ -6,10 +6,11 @@ using AnimatorControllerLayer = UnityEditor.Animations.AnimatorControllerLayer;
 
 public class AnimatorHelpers
 {
-	private static string controllerPath = "Assets/jellejurre/Benchmarker/Assets/Generated/Controllers/";
-	public static AnimatorController SetupAnyStateToggle(int layerCount)
+	public static string controllerPath = "Assets/jellejurre/Benchmarker/Assets/Generated/Controllers/";
+	public static AnimatorController SetupAnyStateToggle(int layerCount, bool canTransitionToSelf = false)
 	{
-		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + "AnyState/" + layerCount + ".controller");
+		string path = canTransitionToSelf ? "AnyStateSelf/" : "AnyState/";
+		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
 
 		if (controller != null)
 		{
@@ -31,6 +32,8 @@ public class AnimatorHelpers
 			AnimatorStateMachine stateMachine = new AnimatorStateMachine();
 			AnimatorState onState = new AnimatorState();
 			AnimatorState offState = new AnimatorState();
+			onState.writeDefaultValues = true;
+			offState.writeDefaultValues = true;
 			onState.name = index + "on";
 			offState.name = index + "off";
 			AnimationClip[] anims = AnimationHelper.GetOrCreateTwoStateToggle("test"+j.ToString(), j);
@@ -48,6 +51,8 @@ public class AnimatorHelpers
 			offToOnTransition.hasExitTime = true;
 			onToOffTransition.destinationState = offState;
 			offToOnTransition.destinationState = onState;
+			onToOffTransition.canTransitionToSelf = canTransitionToSelf;
+			offToOnTransition.canTransitionToSelf = canTransitionToSelf;
 			onToOffTransition.AddCondition(AnimatorConditionMode.Greater, 0.5f, j.ToString());
 			offToOnTransition.AddCondition(AnimatorConditionMode.Less, 0.5f, j.ToString());
 			layer.stateMachine = stateMachine;
@@ -55,7 +60,7 @@ public class AnimatorHelpers
 			layers[j] = layer;
 		}
 		controller.layers = layers;
-		AssetDatabase.CreateAsset(controller, controllerPath + "AnyState/" + layerCount + ".controller");
+		AssetDatabase.CreateAsset(controller, controllerPath + path + layerCount + ".controller");
 		foreach (var animatorControllerLayer in controller.layers)
 		{
 			animatorControllerLayer.stateMachine.hideFlags = HideFlags.HideInHierarchy;
@@ -76,9 +81,10 @@ public class AnimatorHelpers
 		return controller;
 	}
 	
-	public static AnimatorController SetupAnyStateToggle(int layerCount, int stateCount)
+	public static AnimatorController SetupAnyStateToggle(int layerCount, int stateCount, bool canTransitionToSelf = false)
 	{
-		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + $"AnyState/{layerCount}_{stateCount}.controller");
+		string path = canTransitionToSelf ? "AnyStateSelf/" : "AnyState/";
+		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + $"{path}/{layerCount}_{stateCount}.controller");
 
 		if (controller != null)
 		{
@@ -104,7 +110,7 @@ public class AnimatorHelpers
 			{
 				AnimatorState secondState = new AnimatorState();
 				secondState.name = "state" + i;
-				secondState.writeDefaultValues = false;
+				secondState.writeDefaultValues = true;
 				secondState.motion = anims[i%2];
 				var onTransition = new AnimatorStateTransition();
 				onTransition.conditions = new[]
@@ -125,7 +131,7 @@ public class AnimatorHelpers
 				onTransition.destinationState = secondState;
 				anyStates[i] = onTransition;
 				states[i] = new ChildAnimatorState(){state = secondState, position = Vector3.one};
-				onTransition.canTransitionToSelf = true;
+				onTransition.canTransitionToSelf = canTransitionToSelf;
 			}
 			layer.stateMachine.anyStateTransitions = anyStates;
 			layer.stateMachine.states = states;
@@ -181,7 +187,7 @@ public class AnimatorHelpers
 			firstState.name = "state1";
 			firstState.writeDefaultValues = false;
 			firstState.motion = anims[0];
-			ChildAnimatorState[] states = new ChildAnimatorState[stateCount];
+			ChildAnimatorState[] states = new ChildAnimatorState[stateCount + 1];
 			for (int i = 0; i < stateCount; i++)
 			{
 				AnimatorState secondState = new AnimatorState();
@@ -204,19 +210,19 @@ public class AnimatorHelpers
 					new AnimatorCondition()
 					{
 						mode = AnimatorConditionMode.Greater, threshold = i / ((float)stateCount),
-						parameter = i.ToString()
+						parameter = j.ToString()
 					},
 					new AnimatorCondition()
 					{
 						mode = AnimatorConditionMode.Less, threshold = (1+i) / ((float)stateCount),
-						parameter = i.ToString()
+						parameter = j.ToString()
 					}
 				};
 				offTransition.conditions = new[]
 				{
 					new AnimatorCondition()
 					{
-						mode = AnimatorConditionMode.Less, threshold = i / ((float)stateCount), parameter = i.ToString()
+						mode = AnimatorConditionMode.Less, threshold = i / ((float)stateCount), parameter = j.ToString()
 					}
 				};
 				off2Transition.conditions = new[]
@@ -224,18 +230,19 @@ public class AnimatorHelpers
 					new AnimatorCondition()
 					{
 						mode = AnimatorConditionMode.Greater, threshold = (i + 1) / (float)stateCount,
-						parameter = i.ToString()
+						parameter = j.ToString()
 					}
 				};
 				states[i] = new ChildAnimatorState(){state = secondState, position = Vector3.one};
 			}
 
+			states[stateCount] =  new ChildAnimatorState(){state = firstState, position = Vector3.one};
 			layer.stateMachine.states = states;
 			layer.defaultWeight = 1;
 			layers[j] = layer;
 		}
 		controller.layers = layers;
-		AssetDatabase.CreateAsset(controller,  $"ManyState/{layerCount}_{stateCount}.controller");
+		AssetDatabase.CreateAsset(controller,  controllerPath + $"ManyState/{layerCount}_{stateCount}.controller");
 		foreach (var animatorControllerLayer in controller.layers)
 		{
 			animatorControllerLayer.stateMachine.hideFlags = HideFlags.HideInHierarchy;
@@ -244,12 +251,17 @@ public class AnimatorHelpers
 			{
 				childAnimatorState.state.hideFlags = HideFlags.HideInHierarchy;
 				AssetDatabase.AddObjectToAsset(childAnimatorState.state, controller);
+				foreach (var animatorStateTransition in childAnimatorState.state.transitions)
+				{
+					animatorStateTransition.hideFlags = HideFlags.HideInHierarchy;
+					AssetDatabase.AddObjectToAsset(animatorStateTransition, controller);
+				}
 			}
-		}
-		foreach (var animatorStateTransition in transitions)
-		{
-			animatorStateTransition.hideFlags = HideFlags.HideInHierarchy;
-			AssetDatabase.AddObjectToAsset(animatorStateTransition, controller);
+			foreach (var animatorStateTransition in animatorControllerLayer.stateMachine.anyStateTransitions)
+			{
+				animatorStateTransition.hideFlags = HideFlags.HideInHierarchy;
+				AssetDatabase.AddObjectToAsset(animatorStateTransition, controller);
+			}
 		}
 		AssetDatabase.StopAssetEditing();
 		RandomiseParameters(controller);

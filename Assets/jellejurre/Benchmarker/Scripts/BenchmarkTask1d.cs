@@ -76,6 +76,7 @@ public abstract class BenchmarkTask1d : BenchmarkTask
 				if (newPrefab != task.prefab)
 				{
 					task.prefab = newPrefab;
+					EditorUtility.SetDirty(task);
 					AssetDatabase.SaveAssets();
 				}
 			}

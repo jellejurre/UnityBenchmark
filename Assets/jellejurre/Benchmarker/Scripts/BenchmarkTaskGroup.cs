@@ -9,6 +9,10 @@ public class BenchmarkTaskGroup
 	public BenchmarkTaskGroup(BenchmarkTask[] tasks, string name)
 	{
 		this.tasks = tasks;
+		foreach (var benchmarkTask in tasks)
+		{
+			benchmarkTask.group = this;
+		}
 		this.name = name;
 	}
 

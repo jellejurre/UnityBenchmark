@@ -15,6 +15,6 @@ MonoBehaviour:
   initializationTime: 4
   benchmarkTime: 4
   iterationCount: 200
-  baseNum: 1.04
+  baseNum: 1.035
   startVal: 2
   prefab: {fileID: 6875639689166666862, guid: 881d31bded165484dbb2097d1dd64069, type: 3}

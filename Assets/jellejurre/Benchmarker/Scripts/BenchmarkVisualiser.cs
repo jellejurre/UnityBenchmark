@@ -14,7 +14,8 @@ public class BenchmarkVisualiser : MonoBehaviour
 	public bool drawFittedLine;
 	public void Visualise()
 	{
-		Process.Start("python.exe", "Assets/jellejurre/Benchmarker/Scripts/draw.py " + textAsset.name + " "+ (drawFittedLine ? "True" : "False"));
+		string group = AssetDatabase.GetAssetPath(textAsset).Split('/')[ AssetDatabase.GetAssetPath(textAsset).Split('/').Length-2];
+		Process.Start("python.exe", "Assets/jellejurre/Benchmarker/Scripts/draw.py " + textAsset.name + " " + group + " " + (drawFittedLine ? "True" : "False"));
 	}
 }
 
@@ -40,14 +41,19 @@ public class BenchmarkVisualiserEditor : Editor
 			visualiser.Visualise();
 		}
 		serializedObject.ApplyModifiedProperties();
-		Texture image = AssetDatabase.LoadAssetAtPath<Texture>("Assets/jellejurre/Benchmarker/Output/Graphs/"+visualiser.textAsset.name+".png");
+		if (visualiser.textAsset == null)
+		{
+			return;
+		}
+		string group = AssetDatabase.GetAssetPath(visualiser.textAsset).Split('/')[AssetDatabase.GetAssetPath(visualiser.textAsset).Split('/').Length-2];
+		Texture image = AssetDatabase.LoadAssetAtPath<Texture>("Assets/jellejurre/Benchmarker/Output/" + group + "/Graphs/"+visualiser.textAsset.name+".png");
 		if (image != null)
 		{
 			GUILayout.Box(image);
 		}
 		
 		GUILayout.BeginHorizontal();
-		TextAsset text = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/jellejurre/Benchmarker/Output/Data/"+visualiser.textAsset.name+".txt");
+		TextAsset text = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/jellejurre/Benchmarker/Output/" + group + "/Data/"+visualiser.textAsset.name+".txt");
 		if (text != null)
 		{
 			int oldNumber1 = inputNumber1;

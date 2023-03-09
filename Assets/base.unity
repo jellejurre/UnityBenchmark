@@ -121,6 +121,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &67023734
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 67023736}
+  - component: {fileID: 67023735}
+  m_Layer: 0
+  m_Name: Controller Validator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &67023735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67023734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 954b3f968d9f43d0af618c558eff5898, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerPath: Assets/jellejurre/Benchmarker/Assets/Generated/Controllers
+--- !u!4 &67023736
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67023734}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.5731912, y: 0.69649935, z: -0.24599022}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &380812037
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,9 +194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d74b354974b38e4c98ec144631c1cc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tasks:
-  - {fileID: 0}
-  runContinuous: 0
 --- !u!4 &380812039
 Transform:
   m_ObjectHideFlags: 0
@@ -196,7 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7662863e6c9ca224bac65e0722bbe64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textAsset: {fileID: 4900000, guid: c671ae54edef7694087c4527c2fe2e9b, type: 3}
+  textAsset: {fileID: 4900000, guid: 943a141afc71c2b43b8b5d84072c113b, type: 3}
   drawFittedLine: 0
 --- !u!4 &2031972822
 Transform:

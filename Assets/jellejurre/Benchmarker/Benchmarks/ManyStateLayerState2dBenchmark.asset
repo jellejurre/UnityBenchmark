@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e873496d93a47ccaebb27ee648d384d, type: 3}
   m_Name: ManyStateLayerState2dBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 0.2
-  benchmarkTime: 0.2
+  initializationTime: 8
+  benchmarkTime: 8
   iterationCount: 7
   baseNum: 1.45
   startVal: 20

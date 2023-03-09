@@ -44,15 +44,25 @@ public class BenchmarkRepository
 			GetOrCreate<AnimatorCountBenchmark>("AnimatorCountBenchmark.asset"),
 			GetOrCreate<SingleStateLayerBenchmark>("SingleStateLayerBenchmark.asset"),
 			GetOrCreate<SingleStateInactiveLayerBenchmark>("SingleInactiveStateLayerBenchmark.asset"),
+			GetOrCreate<ManyStatesConnectedBenchmark>("ManyStatesConnectedBenchmark.asset"),
+			GetOrCreate<ManyStatesDisconnectedBenchmark>("ManyStatesDisconnectedBenchmark.asset"),
 			GetOrCreate<TwoStateToggleBenchmark>("TwoStateToggleBenchmark.asset"),
 			GetOrCreate<TwoStateToggle2dBenchmark>("TwoStateToggle2dBenchmark.asset"),
 			GetOrCreate<ManyStateLayerState2dBenchmark>("ManyStateLayerState2dBenchmark.asset"),
+		};
+
+		benchmarkTasks.Add(new BenchmarkTaskGroup(LayerSetups, "NonAnyStateLayers"));
+
+		BenchmarkTask[] AnyStateSetups = new BenchmarkTask[]
+		{
+			GetOrCreate<OneAnyStateBenchmark>("AnyStateStateBenchmark.asset"),
 			GetOrCreate<AnyStateToggleBenchmark>("AnyStateToggleBenchmark.asset"),
+			GetOrCreate<AnyStateSelfToggleBenchmark>("AnyStateSelfToggleBenchmark.asset"),
 			GetOrCreate<AnyStateToggle2dBenchmark>("AnyStateToggle2dBenchmark.asset"),
 			GetOrCreate<AnyStateLayerState2dBenchmark>("AnyStateLayerState2dBenchmark.asset")
 		};
 		
-		benchmarkTasks.Add(new BenchmarkTaskGroup(LayerSetups, "LayerSetups"));
+		benchmarkTasks.Add(new BenchmarkTaskGroup(AnyStateSetups, "AnyStateLayers"));
 
 		BenchmarkTask[] Constraints = new BenchmarkTask[]
 		{

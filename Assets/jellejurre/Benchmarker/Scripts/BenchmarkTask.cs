@@ -5,6 +5,7 @@ using UnityEngine;
 [Serializable]
 public abstract class BenchmarkTask : ScriptableObject
 {
+	public BenchmarkTaskGroup group;
 	[SerializeField] public float initializationTime;
 	[SerializeField] public float benchmarkTime;
 	[SerializeField] public int iterationCount;

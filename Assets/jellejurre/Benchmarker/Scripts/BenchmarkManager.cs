@@ -22,7 +22,11 @@ public class BenchmarkManager
 	{
 		SceneManager.activeSceneChanged += RunBenchmark;
 		SceneManager.activeSceneChanged += SelectOldObject;
-		EditorBuildSettings.scenes = EditorBuildSettings.scenes.Append(new EditorBuildSettingsScene("Assets/jellejurre/Benchmarker/Assets/BenchmarkScene.unity", true)).ToArray();
+		if (!EditorBuildSettings.scenes.Any(x => x.path == "Assets/jellejurre/Benchmarker/Assets/BenchmarkScene.unity")){
+			EditorBuildSettings.scenes = EditorBuildSettings.scenes
+				.Append(new EditorBuildSettingsScene("Assets/jellejurre/Benchmarker/Assets/BenchmarkScene.unity", true))
+				.ToArray();
+		}
 	}
 
 	public static void LoadSceneAndRun(BenchmarkTask task)
@@ -85,7 +89,10 @@ public class BenchmarkManager
 			Debug.Log(s);
 		}
 		string[] results = currentTask.FormatResults(data);
-		StreamWriter writer = new StreamWriter($"Assets/jellejurre/Benchmarker/Output/{currentTask.GetName()}.txt");
+		Directory.CreateDirectory($"Assets/jellejurre/Benchmarker/Output/{currentTask.group.name}");
+		Directory.CreateDirectory($"Assets/jellejurre/Benchmarker/Output/{currentTask.group.name}/Graphs");
+		Directory.CreateDirectory($"Assets/jellejurre/Benchmarker/Output/{currentTask.group.name}/Data");
+		StreamWriter writer = new StreamWriter($"Assets/jellejurre/Benchmarker/Output/{currentTask.group.name}/{currentTask.GetName()}.txt");
 		writer.Write(String.Join("\n", results));
 		writer.Flush();
 		writer.Close();
