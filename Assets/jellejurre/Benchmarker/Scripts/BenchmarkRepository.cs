@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Animations;
 using VRC.Core;
 using VRC.Dynamics;
 using Object = UnityEngine.Object;
@@ -47,6 +48,7 @@ public class BenchmarkRepository
 			GetOrCreate<ManyStatesConnectedBenchmark>("ManyStatesConnectedBenchmark.asset"),
 			GetOrCreate<ManyStatesDisconnectedBenchmark>("ManyStatesDisconnectedBenchmark.asset"),
 			GetOrCreate<TwoStateToggleBenchmark>("TwoStateToggleBenchmark.asset"),
+			GetOrCreate<TwoStateSubToggleBenchmark>("TwoSubStateToggleBenchmark.asset"),
 			GetOrCreate<TwoStateToggle2dBenchmark>("TwoStateToggle2dBenchmark.asset"),
 			GetOrCreate<ManyStateLayerState2dBenchmark>("ManyStateLayerState2dBenchmark.asset"),
 		};
@@ -66,11 +68,20 @@ public class BenchmarkRepository
 
 		BenchmarkTask[] Constraints = new BenchmarkTask[]
 		{
+			GetOrCreate<AimConstraintBenchmark>("AimConstraintBenchmark.asset"),
+			GetOrCreate<LookAtConstraintBenchmark>("LookAtConstraintBenchmark.asset"),
+			GetOrCreate<PositionConstraintBenchmark>("PositionConstraintBenchmark.asset"),
+			GetOrCreate<RotationConstraintBenchmark>("RotationConstraintBenchmark.asset"),
+			GetOrCreate<ScaleConstraintBenchmark>("ScaleConstraintBenchmark.asset"),
 			GetOrCreate<ParentConstraintBenchmark>("ParentConstraintBenchmark.asset"),
 			GetOrCreate<ParentConstraintSourcesBenchmark>("ParentConstraintSourcesBenchmark.asset"),
-			GetOrCreate<ParentConstraint2dBenchmark>("ParentConstraint2dBenchmark.asset")
+			GetOrCreate<ParentConstraint2dBenchmark>("ParentConstraint2dBenchmark.asset"),
+			GetOrCreate<ParentConstraintOffBenchmark>("ParentConstraintOffBenchmark.asset"),
+			GetOrCreate<ParentConstraintDisabledBenchmark>("ParentConstraintDisabledBenchmark.asset"),
+			GetOrCreate<ParentConstraintZeroBenchmark>("ParentConstraintZeroBenchmark.asset"),
+			GetOrCreate<MixedConstraintBenchmark>("MixedConstraintBenchmark.asset"),
 		};
-		benchmarkTasks.Add(new BenchmarkTaskGroup(Constraints, "ParentConstraints"));
+		benchmarkTasks.Add(new BenchmarkTaskGroup(Constraints, "Constraints"));
 
 		BenchmarkTask[] Contacts = new BenchmarkTask[]
 		{
