@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Random = System.Random;
 
 [Serializable]
 public abstract class BenchmarkTask1d : BenchmarkTask
@@ -9,6 +10,11 @@ public abstract class BenchmarkTask1d : BenchmarkTask
 	public override GameObject PrepareIteration(GameObject prefab, int iterationNum)
 	{
 		return PrepareIteration1d(prefab, (int)(startVal * Math.Pow(baseNum, iterationNum)));
+	}
+	
+	public override void RunPlaymode(GameObject prefab, int iterationNum)
+	{
+		RunPlaymode1d(prefab, (int)(startVal * Math.Pow(baseNum, iterationNum)));
 	}
 
 	public override string[] FormatDebug(BenchmarkData data)
@@ -36,6 +42,11 @@ public abstract class BenchmarkTask1d : BenchmarkTask
 
 	public abstract string GetParameterName();
 	public abstract GameObject PrepareIteration1d(GameObject prefab, int value);
+
+	public virtual void RunPlaymode1d(GameObject prefab, int value)
+	{
+		
+	}
 
 	public override int GetMaxIterations()
 	{

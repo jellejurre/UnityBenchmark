@@ -48,6 +48,7 @@ public class BenchmarkRepository
 			GetOrCreate<ManyStatesConnectedBenchmark>("ManyStatesConnectedBenchmark.asset"),
 			GetOrCreate<ManyStatesDisconnectedBenchmark>("ManyStatesDisconnectedBenchmark.asset"),
 			GetOrCreate<TwoStateToggleBenchmark>("TwoStateToggleBenchmark.asset"),
+			GetOrCreate<TwoStateToggleActiveBenchmark>("TwoStateToggleActiveBenchmark.asset"),
 			GetOrCreate<TwoStateSubToggleBenchmark>("TwoSubStateToggleBenchmark.asset"),
 			GetOrCreate<TwoStateToggle2dBenchmark>("TwoStateToggle2dBenchmark.asset"),
 			GetOrCreate<ManyStateLayerState2dBenchmark>("ManyStateLayerState2dBenchmark.asset"),
@@ -59,6 +60,7 @@ public class BenchmarkRepository
 		{
 			GetOrCreate<OneAnyStateBenchmark>("AnyStateStateBenchmark.asset"),
 			GetOrCreate<AnyStateToggleBenchmark>("AnyStateToggleBenchmark.asset"),
+			GetOrCreate<AnyStateToggleActiveBenchmark>("AnyStateToggleActiveBenchmark.asset"),
 			GetOrCreate<AnyStateSelfToggleBenchmark>("AnyStateSelfToggleBenchmark.asset"),
 			GetOrCreate<AnyStateToggle2dBenchmark>("AnyStateToggle2dBenchmark.asset"),
 			GetOrCreate<AnyStateLayerState2dBenchmark>("AnyStateLayerState2dBenchmark.asset")

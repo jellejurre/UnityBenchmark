@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Random = System.Random;
 
 public class BenchmarkRunner : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class BenchmarkRunner : MonoBehaviour
 	public float totalRunTime;
 	public int currentIteration;
 	public GameObject currentObject;
-
+	private Random r;
 	private bool restart = false;
 
 	private void Start()
@@ -65,6 +66,8 @@ public class BenchmarkRunner : MonoBehaviour
 			data[currentIteration].AddLast(Time.deltaTime);
 		}
 		
+		task.RunPlaymode(currentObject, currentIteration);
+
 		if (totalRunTime >= task.initializationTime + task.benchmarkTime)
 		{
 			currentIteration++;
@@ -78,5 +81,6 @@ public class BenchmarkRunner : MonoBehaviour
 				SetupIteration();
 			}
 		}
+		
 	}
 }

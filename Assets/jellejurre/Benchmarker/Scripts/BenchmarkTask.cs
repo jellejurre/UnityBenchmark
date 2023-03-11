@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
+using Random = System.Random;
 
 [Serializable]
 public abstract class BenchmarkTask : ScriptableObject
@@ -14,6 +15,11 @@ public abstract class BenchmarkTask : ScriptableObject
 	[SerializeField] public GameObject prefab;
 	public abstract GameObject PrepareIteration(GameObject prefab, int iterationNum);
 
+	public virtual void RunPlaymode(GameObject prefab, int iterationNum)
+	{
+		return;
+	}
+	
 	public abstract string GetName();
 
 	public abstract string GetDescription();

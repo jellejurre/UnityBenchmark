@@ -21,7 +21,6 @@ public class AnimatorHelpers
 
 		controller = new AnimatorController();
 		AnimatorControllerLayer[] layers = new AnimatorControllerLayer[layerCount];
-		AnimatorControllerParameter[] parameters = new AnimatorControllerParameter[layers.Length];
 		AnimatorStateTransition[] transitions = new AnimatorStateTransition[layers.Length * 2];
 		AddParameters(controller, layerCount);
 		for (int j = 0; j < layers.Length; j++)
