@@ -9,6 +9,7 @@ using Random = System.Random;
 public class TwoStateToggleActiveBenchmark : BenchmarkTask1d
 {
 	private Animator animator;
+	private int[] hashes;
 	private float[][] data;
 	private int current = 0;
 	
@@ -33,6 +34,13 @@ public class TwoStateToggleActiveBenchmark : BenchmarkTask1d
 			data[0][i] = (float)r.NextDouble();
 			data[1][i] = (float)r.NextDouble();
 		}
+				
+		hashes = new int[iterationNum];
+		for (int i = 0; i < iterationNum; i++)
+		{
+			hashes[i] = Animator.StringToHash(i.ToString());
+		}
+		
 		AssetDatabase.SaveAssets();
 		return gameObject;
 	}
@@ -42,7 +50,8 @@ public class TwoStateToggleActiveBenchmark : BenchmarkTask1d
 		current = (current + 1) % 2;
 		for (int i = 0; i < iterationNum; i++)
 		{
-			animator.SetFloat(i.ToString(), data[current][i]);
+			if(i>500) continue;
+			animator.SetFloat(hashes[i], data[current][i]);
 		}
 	}
 	

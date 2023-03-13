@@ -9,6 +9,7 @@ using Random = System.Random;
 public class AnyStateToggleActiveBenchmark : BenchmarkTask1d
 {
 	private Animator animator;
+	private int[] hashes;
 	private float[][] data;
 	private int current = 0;
 	public override GameObject PrepareIteration1d(GameObject prefab, int iterationNum)
@@ -23,6 +24,13 @@ public class AnyStateToggleActiveBenchmark : BenchmarkTask1d
 		AnimatorController controller = AnimatorHelpers.SetupAnyStateToggle(iterationNum);
 		animator.runtimeAnimatorController = controller;
 		animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+				
+		hashes = new int[iterationNum];
+		for (int i = 0; i < iterationNum; i++)
+		{
+			hashes[i] = Animator.StringToHash(i.ToString());
+		}
+
 		data = new float[2][];
 		data[0] = new float[iterationNum];
 		data[1] = new float[iterationNum];
@@ -41,7 +49,8 @@ public class AnyStateToggleActiveBenchmark : BenchmarkTask1d
 		current = (current + 1) % 2;
 		for (int i = 0; i < iterationNum; i++)
 		{
-			animator.SetFloat(i.ToString(), data[current][i]);
+			if(i>500) continue;
+			animator.SetFloat(hashes[i], data[current][i]);
 		}
 	}
 	

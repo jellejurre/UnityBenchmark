@@ -29,7 +29,12 @@ public class BenchmarkRepository
 	static void SetupBenchmarks()
 	{
 		benchmarkTasks = new List<BenchmarkTaskGroup>();
-		BenchmarkTask[] test = new[] { GetOrCreate<TestBenchmark>("TestBenchmark.asset") };
+		BenchmarkTask[] test = new BenchmarkTask[]
+		{
+			GetOrCreate<TestBenchmark>("TestBenchmark.asset"),
+			GetOrCreate<TestBenchmarkActive>("TestActiveBenchmark.asset"),
+			GetOrCreate<TestBenchmarkActive2d>("TestActive2dBenchmark.asset")
+		};
 		benchmarkTasks.Add(new BenchmarkTaskGroup(test, "TestGroup"));
 
 		BenchmarkTask[] animatorTypes = new BenchmarkTask[] {
@@ -51,6 +56,7 @@ public class BenchmarkRepository
 			GetOrCreate<TwoStateToggleActiveBenchmark>("TwoStateToggleActiveBenchmark.asset"),
 			GetOrCreate<TwoStateSubToggleBenchmark>("TwoSubStateToggleBenchmark.asset"),
 			GetOrCreate<TwoStateToggle2dBenchmark>("TwoStateToggle2dBenchmark.asset"),
+			GetOrCreate<TwoStateToggleActive2dBenchmark>("TwoStateToggleActive2dBenchmark.asset"),
 			GetOrCreate<ManyStateLayerState2dBenchmark>("ManyStateLayerState2dBenchmark.asset"),
 		};
 
@@ -63,10 +69,21 @@ public class BenchmarkRepository
 			GetOrCreate<AnyStateToggleActiveBenchmark>("AnyStateToggleActiveBenchmark.asset"),
 			GetOrCreate<AnyStateSelfToggleBenchmark>("AnyStateSelfToggleBenchmark.asset"),
 			GetOrCreate<AnyStateToggle2dBenchmark>("AnyStateToggle2dBenchmark.asset"),
+			GetOrCreate<AnyStateToggle2dActiveBenchmark>("AnyStateToggle2dActiveBenchmark.asset"),
 			GetOrCreate<AnyStateLayerState2dBenchmark>("AnyStateLayerState2dBenchmark.asset")
 		};
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(AnyStateSetups, "AnyStateLayers"));
+
+		BenchmarkTask[] DirectBlendTreeSetups = new BenchmarkTask[]
+		{
+			GetOrCreate<DirectBlendTreeToggleBenchmark>("DirectBlendTreeToggleBenchmark.asset"),
+			GetOrCreate<DirectBlendTreeToggle2dBenchmark>("DirectBlendTreeToggle2dBenchmark.asset"),
+			GetOrCreate<DirectBlendTreeActiveBenchmark>("DirectBlendTreeActiveBenchmark.asset"),
+			GetOrCreate<DirectBlendTreeActive2dBenchmark>("DirectBlendTreeActive2dBenchmark.asset")
+		};
+		
+		benchmarkTasks.Add(new BenchmarkTaskGroup(DirectBlendTreeSetups, "DirectBlendTree"));
 
 		BenchmarkTask[] Constraints = new BenchmarkTask[]
 		{
@@ -92,7 +109,6 @@ public class BenchmarkRepository
 		};
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(Contacts, "Contacts"));
-		// benchmarkTasks.Add(GetOrCreate<ContactSendReceiv2dBenchmark>("ContactSendReceiv2dBenchmark.asset"));
 	}
 
 	public static BenchmarkTask GetNext(BenchmarkTask current)

@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
@@ -7,6 +9,8 @@ using AnimatorControllerLayer = UnityEditor.Animations.AnimatorControllerLayer;
 public class AnimatorHelpers
 {
 	public static string controllerPath = "Assets/jellejurre/Benchmarker/Assets/Generated/Controllers/";
+
+	#region AnyState
 	public static AnimatorController SetupAnyStateToggle(int layerCount, bool canTransitionToSelf = false)
 	{
 		string path = canTransitionToSelf ? "AnyStateSelf/" : "AnyState/";
@@ -131,6 +135,10 @@ public class AnimatorHelpers
 		return controller;
 	}
 	
+	#endregion
+
+	#region nonAnyState
+
 	public static AnimatorController SetupManyStateToggle(int layerCount, int stateCount)
 	{
 		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + $"ManyState/{layerCount}_{stateCount}.controller");
@@ -330,7 +338,69 @@ public class AnimatorHelpers
 		RandomiseParameters(controller);
 		return controller;
 	}
+	
+	#endregion
 
+	#region DirectBlendTrees
+
+	public static AnimatorController SetupDirectBlendTree(int layerCount)
+	{
+		string path = "DBT/";
+		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
+
+		if (controller != null)
+		{
+			RandomiseParametersDBT(controller);
+			return controller;
+		}
+		AssetDatabase.StartAssetEditing();
+
+		controller = new AnimatorController();
+		AddParameters(controller, layerCount);
+		AnimatorControllerParameter oneParameter = new AnimatorControllerParameter();
+		oneParameter.name = "one";
+		oneParameter.defaultFloat = 1;
+		oneParameter.type = AnimatorControllerParameterType.Float;
+		controller.parameters = (new[] { oneParameter }).Concat(controller.parameters).ToArray();
+		AnimatorControllerLayer layer = new AnimatorControllerLayer();
+        layer.defaultWeight = 1;
+        layer.name = "ToggleTree";
+        layer.stateMachine = new AnimatorStateMachine();
+        AnimatorState treeState = new AnimatorState();
+        treeState.name = "ToggleTree";
+        BlendTree bigTree = new BlendTree();
+        bigTree.name = "ToggleTree";
+        bigTree.blendType = BlendTreeType.Direct;
+        for (int i = 0; i < layerCount; i++)
+        {
+            BlendTree child = new BlendTree();
+            child.name = i.ToString();
+            child.blendType = BlendTreeType.Simple1D;
+            child.blendParameter = i.ToString();
+            AnimationClip[] anims = AnimationHelper.GetOrCreateTwoStateToggle("test"+i.ToString(), i);
+            child.AddChild(anims[1]);
+            child.AddChild(anims[0]);
+            child.hideFlags = HideFlags.HideInHierarchy;
+            bigTree.AddChild(child);
+        }
+        ChildMotion[] childMotions = bigTree.children;
+        for (var i = 0; i < childMotions.Length; i++)
+        {
+            childMotions[i].directBlendParameter = "one";
+        }
+        bigTree.children = childMotions;
+        treeState.motion = bigTree;
+        layer.stateMachine.AddState(treeState, Vector3.one);
+		controller.layers = new []{layer};
+		AssetDatabase.CreateAsset(controller, controllerPath + path + layerCount + ".controller");
+		SerializeController(controller);
+		AssetDatabase.StopAssetEditing();
+		RandomiseParametersDBT(controller);
+		return controller;
+	}
+
+	#endregion
+	
 	public static void SerializeController(AnimatorController controller)
 	{
 		foreach (var animatorControllerLayer in controller.layers)
@@ -352,6 +422,26 @@ public class AnimatorHelpers
 				animatorStateTransition.hideFlags = HideFlags.HideInHierarchy;
 				AssetDatabase.AddObjectToAsset(animatorStateTransition, controller);
 			}
+			if (childAnimatorState.state.motion is BlendTree tree)
+			{
+				Queue<BlendTree> trees = new Queue<BlendTree>();
+				trees.Enqueue(tree);
+				while (trees.Count>0)
+				{
+					tree = trees.Dequeue();
+					AssetDatabase.RemoveObjectFromAsset(tree);
+					AssetDatabase.AddObjectToAsset(tree, controller);
+					tree.hideFlags = HideFlags.HideInHierarchy;
+
+					foreach (var childMotion in tree.children)
+					{
+						if (childMotion.motion is BlendTree childTree)
+						{
+							trees.Enqueue(childTree);
+						}
+					}
+				}
+			}
 		}
 		foreach (var stateMachineAnyStateTransition in stateMachine.anyStateTransitions)
 		{
@@ -370,6 +460,20 @@ public class AnimatorHelpers
 		foreach (var animatorControllerParameter in parameters)
 		{
 			animatorControllerParameter.defaultFloat = Random.value;
+		}
+		controller.parameters = parameters;
+	}
+	
+	public static void RandomiseParametersDBT(AnimatorController controller)
+	{
+		AnimatorControllerParameter[] parameters = controller.parameters;
+		foreach (var animatorControllerParameter in parameters)
+		{
+			animatorControllerParameter.defaultFloat = (Random.value > 0.5) ? 0 : 1;
+			if (animatorControllerParameter.name == "one")
+			{
+				animatorControllerParameter.defaultFloat = 1;
+			}
 		}
 		controller.parameters = parameters;
 	}

@@ -18,6 +18,12 @@ public abstract class BenchmarkTask2d  : BenchmarkTask {
 			(int)(startVal * Math.Pow(baseNum, iterationNum%iterationCount)),
 			(int)(startVal2 * Math.Pow(baseNum2, iterationNum/iterationCount)));
 	}
+	
+	public override void RunPlaymode(GameObject prefab, int iterationNum)
+	{
+		RunPlaymode2d(prefab, 
+			(int)(startVal * Math.Pow(baseNum, iterationNum%iterationCount)),
+			(int)(startVal2 * Math.Pow(baseNum2, iterationNum/iterationCount)));	}
 
 	public override string[] FormatDebug(BenchmarkData data)
 	{
@@ -97,5 +103,10 @@ public abstract class BenchmarkTask2d  : BenchmarkTask {
 		BenchmarkerEditor.FitLabel(task.GetDescription());
 		GUILayout.EndHorizontal();
 		GUILayout.EndVertical();
+	}
+
+	public virtual void RunPlaymode2d(GameObject gameObject, int iterationNum, int iterationNum2)
+	{
+		
 	}
 }
