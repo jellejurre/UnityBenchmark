@@ -85,6 +85,25 @@ public class BenchmarkRepository
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(DirectBlendTreeSetups, "DirectBlendTree"));
 
+		BenchmarkTask[] Behaviours = new BenchmarkTask[]
+		{
+			GetOrCreate<LayerControlBenchmark>("LayerControlBenchmark.asset"),
+			GetOrCreate<LocomotionControlBenchmark>("LocomotionControlBenchmark.asset"),
+			GetOrCreate<ParameterDriverBenchmark>("ParameterDriverBenchmark.asset"),
+			GetOrCreate<ParameterDriverActiveBenchmark>("ParameterDriverActiveBenchmark.asset"),
+			GetOrCreate<PlayableLayerControlBenchmark>("PlayableLayerControlBenchmark.asset"),
+			GetOrCreate<TempPoseBenchmark>("TempPoseBenchmark.asset"),
+			GetOrCreate<TrackingControlBenchmark>("TrackingControlBenchmark.asset"),
+			GetOrCreate<SingleLayerControlBenchmark>("SingleLayerControlBenchmark.asset"),
+			GetOrCreate<SingleLocomotionControlBenchmark>("SingleLocomotionControlBenchmark.asset"),
+			GetOrCreate<SingleParameterDriverBenchmark>("SingleParameterDriverBenchmark.asset"),
+			GetOrCreate<SinglePlayableLayerControlBenchmark>("SinglePlayableLayerControlBenchmark.asset"),
+			GetOrCreate<SingleLayerControlBenchmark>("SingleLayerControlBenchmark.asset"),
+			GetOrCreate<SingleTrackingControlBenchmark>("SingleTrackingControlBenchmark.asset"),
+		};
+		
+		benchmarkTasks.Add(new BenchmarkTaskGroup(Behaviours, "Behaviours"));
+		
 		BenchmarkTask[] Constraints = new BenchmarkTask[]
 		{
 			GetOrCreate<AimConstraintBenchmark>("AimConstraintBenchmark.asset"),

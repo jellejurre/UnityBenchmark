@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9906a5b56f64c0e88d196b2f17e3d01, type: 3}
-  m_Name: DirectBlendTreeActive2dBenchmark
+  m_Script: {fileID: 11500000, guid: 7d1d2818bd884833b58d3a99a6a2cfd9, type: 3}
+  m_Name: ParameterDriverBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 0
-  benchmarkTime: 0
-  iterationCount: 0
-  baseNum: 0
-  startVal: 0
-  prefab: {fileID: 0}
-  baseNum2: 0
-  startVal2: 0
+  initializationTime: 4
+  benchmarkTime: 4
+  iterationCount: 30
+  baseNum: 1.2
+  startVal: 20
+  prefab: {fileID: 919132149155446097, guid: 1700a058d03ae804e9afd860a62129c1, type: 3}
