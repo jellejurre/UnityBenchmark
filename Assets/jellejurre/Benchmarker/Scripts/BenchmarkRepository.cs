@@ -57,6 +57,8 @@ public class BenchmarkRepository
 			GetOrCreate<TwoStateSubToggleBenchmark>("TwoSubStateToggleBenchmark.asset"),
 			GetOrCreate<TwoStateToggle2dBenchmark>("TwoStateToggle2dBenchmark.asset"),
 			GetOrCreate<TwoStateToggleActive2dBenchmark>("TwoStateToggleActive2dBenchmark.asset"),
+			GetOrCreate<BigTwoStateToggle2dBenchmark>("BigTwoStateToggle2dBenchmark.asset"),
+			GetOrCreate<BigTwoStateToggleActive2dBenchmark>("BigTwoStateToggleActive2dBenchmark.asset"),
 			GetOrCreate<ManyStateLayerState2dBenchmark>("ManyStateLayerState2dBenchmark.asset"),
 		};
 
