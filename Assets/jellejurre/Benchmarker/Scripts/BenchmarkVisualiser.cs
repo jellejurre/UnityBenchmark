@@ -12,10 +12,11 @@ public class BenchmarkVisualiser : MonoBehaviour
 {
 	public TextAsset textAsset;
 	public bool drawFittedLine;
+	public float visualisePercentage;
 	public void Visualise()
 	{
 		string group = AssetDatabase.GetAssetPath(textAsset).Split('/')[ AssetDatabase.GetAssetPath(textAsset).Split('/').Length-2];
-		Process.Start("python.exe", "Assets/jellejurre/Benchmarker/Scripts/draw.py " + textAsset.name + " " + group + " " + (drawFittedLine ? "True" : "False"));
+		Process.Start("python.exe", "Assets/jellejurre/Benchmarker/Scripts/draw.py " + textAsset.name + " " + group + " " + (drawFittedLine ? "True" : "False") + " " + visualisePercentage);
 	}
 }
 
@@ -36,6 +37,8 @@ public class BenchmarkVisualiserEditor : Editor
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("textAsset"));
 		visualiser.drawFittedLine = GUILayout.Toggle(visualiser.drawFittedLine, "Visualise Fitted Line");
 
+		visualiser.visualisePercentage = EditorGUILayout.Slider(new GUIContent("Percentage of data to visualize"), visualiser.visualisePercentage, 0, 1, Array.Empty<GUILayoutOption>());
+		
 		if (GUILayout.Button("Update Visualisation"))
 		{
 			visualiser.Visualise();

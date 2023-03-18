@@ -60,8 +60,17 @@ def polyfit2d(x, y, z, kx=3, ky=3, order=None):
 f = open("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/"+ sys.argv[1] + ".txt", "r")
 lines = f.readlines()
 names = lines[0].split(",") 
+percentage = float(sys.argv[4])
 lines.pop(0)
 if len(names) == 1:
+    xs = [int(spl.split(",")[0]) for spl in lines]
+    ys = [float(spl.split(",")[1]) for spl in lines]
+    maxVal = max(xs)
+    newLines = []
+    for i in range(len(xs)):
+        if(xs[i] < maxVal * percentage):
+            newLines.append(lines[i])
+    lines = newLines
     xs = [int(spl.split(",")[0]) for spl in lines]
     ys = [float(spl.split(",")[1]) for spl in lines]
     plt.plot(xs, ys)
