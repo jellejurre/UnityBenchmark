@@ -130,6 +130,16 @@ public class BenchmarkRepository
 		};
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(Contacts, "Contacts"));
+
+		BenchmarkTask[] FaceTracking = new BenchmarkTask[]
+		{
+			GetOrCreate<BlendTreeFaceTracking>("BlendTreeFaceTracking.asset"),
+			GetOrCreate<BlendTreeFaceTrackingActive>("BlendTreeFaceTrackingActive.asset"),
+			GetOrCreate<LayerFaceTracking>("LayerFaceTracking.asset"),
+			GetOrCreate<LayerFaceTrackingActive>("LayerFaceTrackingActive.asset"),
+		};
+		
+		benchmarkTasks.Add(new BenchmarkTaskGroup(FaceTracking, "FaceTracking"));
 	}
 
 	public static BenchmarkTask GetNext(BenchmarkTask current)

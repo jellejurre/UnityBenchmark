@@ -131,8 +131,9 @@ GameObject:
   m_Component:
   - component: {fileID: 67023736}
   - component: {fileID: 67023735}
+  - component: {fileID: 67023737}
   m_Layer: 0
-  m_Name: Controller Validator
+  m_Name: Util
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,6 +166,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &67023737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67023734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07009fff2ace49deaf807d7ff9da37c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 7400000, guid: cd4302ada907bd74fb4e708467f05ddb, type: 2}
+  controller: {fileID: 9100000, guid: 53f46ba704a87e44bbb1910bab4e34d5, type: 2}
 --- !u!1 &380812037
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,8 +252,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7662863e6c9ca224bac65e0722bbe64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textAsset: {fileID: 4900000, guid: 78dd6a7cf4c025c4bbccba9b952cca5c, type: 3}
-  drawFittedLine: 0
+  textAsset: {fileID: 4900000, guid: 44d3596832b06c84191056423915c915, type: 3}
+  drawFittedLine: 1
 --- !u!4 &2031972822
 Transform:
   m_ObjectHideFlags: 0
