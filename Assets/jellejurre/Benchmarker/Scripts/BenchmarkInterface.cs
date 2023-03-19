@@ -159,6 +159,9 @@ public class BenchmarkerEditor : Editor
 				}
 			}
 			GUILayout.EndHorizontal();
+			GUILayout.BeginHorizontal();
+			FitLabel(task.GetDescription());
+			GUILayout.EndHorizontal();
 			GUILayout.EndVertical();
 		}
 	}

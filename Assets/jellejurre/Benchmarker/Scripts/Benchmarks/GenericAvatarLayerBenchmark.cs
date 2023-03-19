@@ -2,14 +2,14 @@
 using UnityEditor.Animations;
 using UnityEngine;
 
-public class NoRigLayerBenchmark : BenchmarkTask
+public class GenericAvatarLayerBenchmark : BenchmarkTask
 {
-	public override GameObject PrepareIteration(GameObject prefab, int iteration)
+	public override GameObject PrepareIteration(GameObject prefab, int iterationNum)
 	{
 		GameObject gameObject = Instantiate(prefab);
 		Animator animator = gameObject.GetOrAddComponent<Animator>();
 		AnimatorController controller = new AnimatorController();
-		AnimatorControllerLayer[] layers = new AnimatorControllerLayer[(int)(startVal * Math.Pow(baseNum, iteration))];
+		AnimatorControllerLayer[] layers = new AnimatorControllerLayer[iterationNum];
 		for (int i = 0; i < layers.Length; i++)
 		{
 			AnimatorControllerLayer layer = new AnimatorControllerLayer();
@@ -22,12 +22,17 @@ public class NoRigLayerBenchmark : BenchmarkTask
 		}
 		controller.layers = layers;
 		animator.runtimeAnimatorController = controller;
-		animator.avatar = null;
+		animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
 		return gameObject;
 	}
 
 	public override string GetName()
 	{
-		return "NoRig";
+		return "GenericRig";
+	}
+	
+	public override string GetDescription()
+	{
+		return "Benchmarks empty layer count on generic avatar";
 	}
 }

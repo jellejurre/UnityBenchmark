@@ -39,7 +39,7 @@ public class BenchmarkRunner : MonoBehaviour
 			prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/jellejurre/Benchmarker/Assets/Prefabs/Cube.prefab");
 		}
 
-		currentObject = task.PrepareIteration(prefab, currentIteration);
+		currentObject = task.PrepareIteration(prefab, task.GetIterationNumber(currentIteration));
 	}
 
 	private void Update()

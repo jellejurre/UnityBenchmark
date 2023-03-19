@@ -63,8 +63,8 @@ public class BenchmarkManager
 		string s = "";
 		for (var i = 0; i < data.frameTimes.Length; i++)
 		{
-			Debug.Log($"Iteration: {i}, Amount: {(int)(currentTask.startVal * Math.Pow(currentTask.baseNum, i))}, Average FrameTime: {data.frameTimes[i].Average()}");
-			s += $"{(int)(currentTask.startVal * Math.Pow(currentTask.baseNum, i))},{data.frameTimes[i].Average()}\n";
+			Debug.Log($"Iteration: {i}, Amount: {currentTask.GetIterationNumber(i)}, Average FrameTime: {data.frameTimes[i].Average()}");
+			s += $"{currentTask.GetIterationNumber(i)},{data.frameTimes[i].Average()}\n";
 		}
 		StreamWriter writer = new StreamWriter($"Assets/jellejurre/Benchmarker/Output/{currentTask.GetName()}.txt");
 		writer.Write(s);

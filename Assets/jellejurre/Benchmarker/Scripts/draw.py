@@ -19,4 +19,5 @@ plt.ylabel("Time in ms")
 vars = ["{:.3E}".format(var) for var in vars]
 plt.title(f"Fitted Curve: {vars[0]}x^2 + {vars[1]}x + {vars[2]}")
 plt.savefig("Assets/jellejurre/Benchmarker/Output/Graphs/" + sys.argv[1] + ".png")
-print("saved")
+f = open("Assets/jellejurre/Benchmarker/Output/Data/" + sys.argv[1] + ".txt", "w")
+f.write(f"{vars[0]},{vars[1]},{vars[2]}")

@@ -61,3 +61,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+Assets/jellejurre/Benchmarker/Assets/Generated/Animations/**
+Assets/jellejurre/Benchmarker/Assets/Generated/Controllers/**
+.idea/**
