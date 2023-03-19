@@ -53,6 +53,7 @@ public class BenchmarkRepository
 			GetOrCreate<ManyStatesConnectedBenchmark>("ManyStatesConnectedBenchmark.asset"),
 			GetOrCreate<ManyStatesDisconnectedBenchmark>("ManyStatesDisconnectedBenchmark.asset"),
 			GetOrCreate<TwoStateToggleBenchmark>("TwoStateToggleBenchmark.asset"),
+			GetOrCreate<TwoStateToggleWDOffBenchmark>("TwoStateToggleWDOffBenchmark.asset"),
 			GetOrCreate<TwoStateToggleActiveBenchmark>("TwoStateToggleActiveBenchmark.asset"),
 			GetOrCreate<TwoStateSubToggleBenchmark>("TwoSubStateToggleBenchmark.asset"),
 			GetOrCreate<TwoStateToggle2dBenchmark>("TwoStateToggle2dBenchmark.asset"),
@@ -68,8 +69,10 @@ public class BenchmarkRepository
 		{
 			GetOrCreate<OneAnyStateBenchmark>("AnyStateStateBenchmark.asset"),
 			GetOrCreate<AnyStateToggleBenchmark>("AnyStateToggleBenchmark.asset"),
+			GetOrCreate<AnyStateToggleWDOffBenchmark>("AnyStateToggleWDOffBenchmark.asset"),
 			GetOrCreate<AnyStateToggleActiveBenchmark>("AnyStateToggleActiveBenchmark.asset"),
 			GetOrCreate<AnyStateSelfToggleBenchmark>("AnyStateSelfToggleBenchmark.asset"),
+			GetOrCreate<AnyStateSelfToggleActiveBenchmark>("AnyStateSelfToggleActiveBenchmark.asset"),
 			GetOrCreate<AnyStateToggle2dBenchmark>("AnyStateToggle2dBenchmark.asset"),
 			GetOrCreate<AnyStateToggle2dActiveBenchmark>("AnyStateToggle2dActiveBenchmark.asset"),
 			GetOrCreate<AnyStateLayerState2dBenchmark>("AnyStateLayerState2dBenchmark.asset")
@@ -80,8 +83,14 @@ public class BenchmarkRepository
 		BenchmarkTask[] DirectBlendTreeSetups = new BenchmarkTask[]
 		{
 			GetOrCreate<DirectBlendTreeToggleBenchmark>("DirectBlendTreeToggleBenchmark.asset"),
+			GetOrCreate<DirectBlendTreeSingleBenchmark>("DirectBlendTreeSingleBenchmark.asset"),
+			GetOrCreate<DirectBlendTreeDefaultBenchmark>("DirectBlendTreeDefaultBenchmark.asset"),
+			GetOrCreate<DBTDefaultAnimBenchmark>("DBTDefaultAnimBenchmark.asset"),
 			GetOrCreate<DirectBlendTreeToggle2dBenchmark>("DirectBlendTreeToggle2dBenchmark.asset"),
 			GetOrCreate<DirectBlendTreeActiveBenchmark>("DirectBlendTreeActiveBenchmark.asset"),
+			GetOrCreate<DirectBlendTreeSingleActiveBenchmark>("DirectBlendTreeSingleActiveBenchmark.asset"),
+			GetOrCreate<DirectBlendTreeDefaultActiveBenchmark>("DirectBlendTreeDefaultActiveBenchmark.asset"),
+			GetOrCreate<DBTDefaultAnimActiveBenchmark>("DBTDefaultAnimActiveBenchmark.asset"),
 			GetOrCreate<DirectBlendTreeActive2dBenchmark>("DirectBlendTreeActive2dBenchmark.asset")
 		};
 		

@@ -11,9 +11,9 @@ public class AnimatorHelpers
 	public static string controllerPath = "Assets/jellejurre/Benchmarker/Assets/Generated/Controllers/";
 
 	#region AnyState
-	public static AnimatorController SetupAnyStateToggle(int layerCount, bool canTransitionToSelf = false)
+	public static AnimatorController SetupAnyStateToggle(int layerCount, bool canTransitionToSelf = false, bool writeDefaults = true)
 	{
-		string path = canTransitionToSelf ? "AnyStateSelf/" : "AnyState/";
+		string path = writeDefaults ? canTransitionToSelf ? "AnyStateSelf/" : "AnyState/" : "AnyStateWDOff/";
 		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
 
 		if (controller != null)
@@ -35,8 +35,8 @@ public class AnimatorHelpers
 			AnimatorStateMachine stateMachine = new AnimatorStateMachine();
 			AnimatorState onState = new AnimatorState();
 			AnimatorState offState = new AnimatorState();
-			onState.writeDefaultValues = true;
-			offState.writeDefaultValues = true;
+			onState.writeDefaultValues = writeDefaults;
+			offState.writeDefaultValues = writeDefaults;
 			onState.name = index + "on";
 			offState.name = index + "off";
 			AnimationClip[] anims = AnimationHelper.GetOrCreateTwoStateToggle("test"+j.ToString(), j);
@@ -228,9 +228,11 @@ public class AnimatorHelpers
 		return controller;
 	}
 	
-	public static AnimatorController SetupTwoToggles(int layerCount)
+	public static AnimatorController SetupTwoToggles(int layerCount, bool writeDefaults = true)
 	{
-		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + "TwoToggle/" + layerCount + ".controller");
+		string path = writeDefaults ? "TwoToggle/" : "TwoToggleWDOff/";
+		AnimatorController controller = 
+			AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
 
 		if (controller != null)
 		{
@@ -256,6 +258,8 @@ public class AnimatorHelpers
 			AnimationClip[] anims = AnimationHelper.GetOrCreateTwoStateToggle("test"+j.ToString(), j);
 			onState.motion = anims[0];
 			offState.motion = anims[1];
+			onState.writeDefaultValues = writeDefaults;
+			offState.writeDefaultValues = writeDefaults;
 			stateMachine.AddState(onState, Vector3.one);
 			stateMachine.AddState(offState, Vector3.one);
 			AnimatorStateTransition onToOffTransition = new AnimatorStateTransition();
@@ -277,7 +281,7 @@ public class AnimatorHelpers
 			layers[j] = layer;
 		}
 		controller.layers = layers;
-		AssetDatabase.CreateAsset(controller, controllerPath + "TwoToggle/" + layerCount + ".controller");
+		AssetDatabase.CreateAsset(controller, controllerPath + path + layerCount + ".controller");
 		SerializeController(controller);
 		AssetDatabase.StopAssetEditing();
 		RandomiseParameters(controller);
@@ -393,6 +397,102 @@ public class AnimatorHelpers
         layer.stateMachine.AddState(treeState, Vector3.one);
 		controller.layers = new []{layer};
 		AssetDatabase.CreateAsset(controller, controllerPath + path + layerCount + ".controller");
+		SerializeController(controller);
+		AssetDatabase.StopAssetEditing();
+		RandomiseParametersDBT(controller);
+		return controller;
+	}
+	
+	
+	public static AnimatorController SetupSingleDirectBlendTree(int layerCount, bool defaultsLayer = false, bool singleAnim = false)
+	{
+		string path = singleAnim ? "DBT-Single-Anim/" : defaultsLayer ? "DBT-Single-Defaults/" : "DBT-Single/";
+		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
+
+		if (controller != null)
+		{
+			RandomiseParametersDBT(controller);
+			return controller;
+		}
+		AssetDatabase.StartAssetEditing();
+
+		controller = new AnimatorController();
+		AddParameters(controller, layerCount);
+		AnimatorControllerParameter oneParameter = new AnimatorControllerParameter();
+		oneParameter.name = "one";
+		oneParameter.defaultFloat = 1;
+		oneParameter.type = AnimatorControllerParameterType.Float;
+		controller.parameters = (new[] { oneParameter }).Concat(controller.parameters).ToArray();
+		// DefaultsLayer
+		AnimatorControllerLayer defLayer = new AnimatorControllerLayer();
+		if (defaultsLayer)
+		{
+			defLayer.defaultWeight = 1;
+			defLayer.name = "ToggleTree";
+			defLayer.stateMachine = new AnimatorStateMachine();
+			if (singleAnim)
+			{
+				AnimatorState defState = new AnimatorState();
+				defState.motion = AnimationHelper.GetOrCreateBigOnToggle("test", layerCount);
+				defLayer.stateMachine.AddState(defState, Vector3.one);
+			}
+			else
+			{
+				AnimatorState defTreeState = new AnimatorState();
+				defTreeState.name = "ToggleTree";
+				BlendTree defTree = new BlendTree();
+				defTree.name = "ToggleTree";
+				defTree.blendType = BlendTreeType.Direct;
+				for (int i = 0; i < layerCount; i++)
+				{
+					AnimationClip[] anims = AnimationHelper.GetOrCreateTwoStateToggle("test" + i.ToString(), i);
+					defTree.AddChild(anims[0]);
+				}
+
+				ChildMotion[] defChildMotions = defTree.children;
+				for (var i = 0; i < defChildMotions.Length; i++)
+				{
+					defChildMotions[i].directBlendParameter = "one";
+				}
+
+				defTree.children = defChildMotions;
+				defTreeState.motion = defTree;
+				defLayer.stateMachine.AddState(defTreeState, Vector3.one);
+			}
+		}
+		// TreeLayer
+		AnimatorControllerLayer layer = new AnimatorControllerLayer();
+        layer.defaultWeight = 1;
+        layer.name = "ToggleTree";
+        layer.stateMachine = new AnimatorStateMachine();
+        AnimatorState treeState = new AnimatorState();
+        treeState.name = "ToggleTree";
+        BlendTree bigTree = new BlendTree();
+        bigTree.name = "ToggleTree";
+        bigTree.blendType = BlendTreeType.Direct;
+        for (int i = 0; i < layerCount; i++)
+        {
+	        AnimationClip[] anims = AnimationHelper.GetOrCreateTwoStateToggle("test"+i.ToString(), i);
+	        bigTree.AddChild(anims[1]);
+        }
+        ChildMotion[] childMotions = bigTree.children;
+        for (var i = 0; i < childMotions.Length; i++)
+        {
+            childMotions[i].directBlendParameter = i.ToString();
+        }
+        bigTree.children = childMotions;
+        treeState.motion = bigTree;
+        layer.stateMachine.AddState(treeState, Vector3.one);
+        if (defaultsLayer)
+        {
+	        controller.layers = new[] { defLayer, layer };
+        }
+        else
+        {
+	        controller.layers = new []{layer};
+        }
+
+        AssetDatabase.CreateAsset(controller, controllerPath + path + layerCount + ".controller");
 		SerializeController(controller);
 		AssetDatabase.StopAssetEditing();
 		RandomiseParametersDBT(controller);

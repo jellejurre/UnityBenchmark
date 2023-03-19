@@ -30,6 +30,30 @@ public class AnimationHelper
 		return new[] { onClip, offClip };
 	}
 	
+	public static AnimationClip GetOrCreateBigOnToggle(string path, int i)
+	{
+		AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationPath + "GameObjectsOn" + i + ".anim");
+		if (clip != null)
+		{
+			return clip;
+		}
+
+		AnimationClip onClip = new AnimationClip();
+		onClip.name = "GameObjectOn" + i;
+		for (int j = 0; j < i; j++)
+		{
+			EditorCurveBinding binding = new EditorCurveBinding();
+			binding.path = path + j;
+			binding.type = typeof(GameObject);
+			binding.propertyName = "m_IsActive";
+			AnimationCurve curveOn = AnimationCurve.Linear(0, 1, 1/60f, 1);
+			AnimationUtility.SetEditorCurve(onClip, binding, curveOn);
+		}
+
+		AssetDatabase.CreateAsset(onClip, animationPath + "GameObjectsOn" + i + ".anim");
+		return onClip;
+	}
+	
 	public static AnimationClip GetOrCreateOneStateToggle(string path, int i)
 	{
 		AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationPath+ "GameObjectOff" + i + ".anim");

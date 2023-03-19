@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52805e923c0547668c9bc3334e679704, type: 3}
   m_Name: DirectBlendTreeToggleBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 20
-  benchmarkTime: 20
+  initializationTime: 4
+  benchmarkTime: 4
   iterationCount: 30
   baseNum: 1.2
-  startVal: 2747
+  startVal: 20
   prefab: {fileID: 919132149155446097, guid: 1700a058d03ae804e9afd860a62129c1, type: 3}
