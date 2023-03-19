@@ -178,7 +178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07009fff2ace49deaf807d7ff9da37c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 7400000, guid: cd4302ada907bd74fb4e708467f05ddb, type: 2}
   controller: {fileID: 9100000, guid: 53f46ba704a87e44bbb1910bab4e34d5, type: 2}
 --- !u!1 &380812037
 GameObject:
@@ -252,9 +251,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7662863e6c9ca224bac65e0722bbe64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textAsset: {fileID: 4900000, guid: 814fdeebbccee434791b6c5880d849c1, type: 3}
-  drawFittedLine: 1
-  visualisePercentage: 0.2
+  textAsset: {fileID: 4900000, guid: 19677cf0ed42513469a8d3402e684f34, type: 3}
+  drawFittedLine: 0
+  visualisePercentage: 1
 --- !u!4 &2031972822
 Transform:
   m_ObjectHideFlags: 0
