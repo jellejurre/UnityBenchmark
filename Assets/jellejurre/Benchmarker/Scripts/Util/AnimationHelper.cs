@@ -1,11 +1,19 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class AnimationHelper
 {
 	private static string animationPath = "Assets/jellejurre/Benchmarker/Assets/Generated/Animations/";
+	public static void ReadyPath(string folderPath)
+	{
+		if (Directory.Exists(folderPath)) return;
+		Directory.CreateDirectory(folderPath);
+		AssetDatabase.ImportAsset(folderPath);
+	}
 	public static AnimationClip[] GetOrCreateTwoStateToggle(string path, int i)
 	{
+		ReadyPath(animationPath);
 		AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationPath + "GameObjectOn" + i + ".anim");
 		AnimationClip clip2 = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationPath+ "GameObjectOff" + i + ".anim");
 		if (clip != null && clip2 != null)
@@ -32,6 +40,7 @@ public class AnimationHelper
 	
 	public static AnimationClip GetOrCreateBigOnToggle(string path, int i)
 	{
+		ReadyPath(animationPath);
 		AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationPath + "GameObjectsOn" + i + ".anim");
 		if (clip != null)
 		{
@@ -56,6 +65,7 @@ public class AnimationHelper
 	
 	public static AnimationClip GetOrCreateOneStateToggle(string path, int i)
 	{
+		ReadyPath(animationPath);
 		AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationPath+ "GameObjectOff" + i + ".anim");
 		if (clip != null)
 		{

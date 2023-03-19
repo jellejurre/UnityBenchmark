@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Windows;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 using AnimatorControllerLayer = UnityEditor.Animations.AnimatorControllerLayer;
 
@@ -10,10 +11,20 @@ public class AnimatorHelpers
 {
 	public static string controllerPath = "Assets/jellejurre/Benchmarker/Assets/Generated/Controllers/";
 
+	public static void ReadyPath(string folderPath)
+	{
+		folderPath = folderPath.Substring(0 , folderPath.Length - 1);
+		if (Directory.Exists(folderPath)) return;
+		Directory.CreateDirectory(controllerPath);
+		Directory.CreateDirectory(folderPath);
+		AssetDatabase.ImportAsset(folderPath);
+	}
+	
 	#region AnyState
 	public static AnimatorController SetupAnyStateToggle(int layerCount, bool canTransitionToSelf = false, bool writeDefaults = true)
 	{
 		string path = writeDefaults ? canTransitionToSelf ? "AnyStateSelf/" : "AnyState/" : "AnyStateWDOff/";
+		ReadyPath(controllerPath + path);
 		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
 
 		if (controller != null)
@@ -73,6 +84,7 @@ public class AnimatorHelpers
 	public static AnimatorController SetupAnyStateToggle(int layerCount, int stateCount, bool canTransitionToSelf = false)
 	{
 		string path = canTransitionToSelf ? "AnyStateSelf/" : "AnyState/";
+		ReadyPath(controllerPath + path);
 		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + $"{path}/{layerCount}_{stateCount}.controller");
 
 		if (controller != null)
@@ -128,7 +140,7 @@ public class AnimatorHelpers
 			layers[j] = layer;
 		}
 		controller.layers = layers;
-		AssetDatabase.CreateAsset(controller, controllerPath + $"AnyState/{layerCount}_{stateCount}.controller");
+		AssetDatabase.CreateAsset(controller, controllerPath + $"{path}{layerCount}_{stateCount}.controller");
 		SerializeController(controller);
 		AssetDatabase.StopAssetEditing();
 		RandomiseParameters(controller);
@@ -141,6 +153,7 @@ public class AnimatorHelpers
 
 	public static AnimatorController SetupManyStateToggle(int layerCount, int stateCount)
 	{
+		ReadyPath(controllerPath + "ManyState/");
 		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + $"ManyState/{layerCount}_{stateCount}.controller");
 
 		if (controller != null)
@@ -231,6 +244,7 @@ public class AnimatorHelpers
 	public static AnimatorController SetupTwoToggles(int layerCount, bool writeDefaults = true)
 	{
 		string path = writeDefaults ? "TwoToggle/" : "TwoToggleWDOff/";
+		ReadyPath(controllerPath + path);
 		AnimatorController controller = 
 			AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
 
@@ -290,6 +304,7 @@ public class AnimatorHelpers
 	
 	public static AnimatorController SetupTwoTogglesSubStateMachine(int layerCount)
 	{
+		ReadyPath(controllerPath + "TwoToggleSub/");
 		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + "TwoToggleSub/" + layerCount + ".controller");
 
 		if (controller != null)
@@ -350,6 +365,7 @@ public class AnimatorHelpers
 	public static AnimatorController SetupDirectBlendTree(int layerCount)
 	{
 		string path = "DBT/";
+		ReadyPath(controllerPath + "TwoToggleSub/");
 		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
 
 		if (controller != null)
@@ -407,6 +423,7 @@ public class AnimatorHelpers
 	public static AnimatorController SetupSingleDirectBlendTree(int layerCount, bool defaultsLayer = false, bool singleAnim = false)
 	{
 		string path = singleAnim ? "DBT-Single-Anim/" : defaultsLayer ? "DBT-Single-Defaults/" : "DBT-Single/";
+		ReadyPath(controllerPath + "TwoToggleSub/");
 		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
 
 		if (controller != null)
