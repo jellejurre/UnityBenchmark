@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcefa9b095a45dd8a09217272bceac6, type: 3}
+  m_Name: ContactComboActiveCapsuleBenchmark
+  m_EditorClassIdentifier: 
+  initializationTime: 2
+  benchmarkTime: 2
+  iterationCount: 30
+  baseNum: 1.2
+  startVal: 20
+  prefab: {fileID: 6875639689166666862, guid: 881d31bded165484dbb2097d1dd64069, type: 3}
+  current: 0
+  objects: []

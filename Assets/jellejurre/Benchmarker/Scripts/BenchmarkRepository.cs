@@ -135,7 +135,13 @@ public class BenchmarkRepository
 		BenchmarkTask[] Contacts = new BenchmarkTask[]
 		{
 			GetOrCreate<ContactSenderBenchmark>("ContactSenderBenchmark.asset"),
-			GetOrCreate<ContactReceiverBenchmark>("ContactReceiverBenchmark.asset")
+			GetOrCreate<ContactReceiverBenchmark>("ContactReceiverBenchmark.asset"),
+			GetOrCreate<ContactComboSeperatedBenchmark>("ContactComboSeperatedBenchmark.asset"),
+			GetOrCreate<ContactComboTogetherBenchmark>("ContactComboTogetherBenchmark.asset"),
+			GetOrCreate<ContactComboSameNameBenchmark>("ContactComboSameNameBenchmark.asset"),
+			GetOrCreate<ContactComboActiveBenchmark>("ContactComboActiveBenchmark.asset"),
+			GetOrCreate<ContactComboActiveCapsuleBenchmark>("ContactComboActiveCapsuleBenchmark.asset"),
+			GetOrCreate<ContactComboActiveProximityBenchmark>("ContactComboActiveProximityBenchmark.asset")
 		};
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(Contacts, "Contacts"));
@@ -149,6 +155,13 @@ public class BenchmarkRepository
 		};
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(FaceTracking, "FaceTracking"));
+
+		BenchmarkTask[] Audio = new BenchmarkTask[]
+		{
+			GetOrCreate<AudioSourceBenchmark>("AudioSourceBenchmark.asset"),
+		};
+		
+		benchmarkTasks.Add(new BenchmarkTaskGroup(Audio, "AudioSources"));
 	}
 
 	public static BenchmarkTask GetNext(BenchmarkTask current)

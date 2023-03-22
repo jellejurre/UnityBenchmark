@@ -141,6 +141,12 @@
         "com.unity.nuget.newtonsoft-json": "2.0.2"
       }
     },
+    "lyuma.av3emulator": {
+      "version": "file:lyuma.av3emulator",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

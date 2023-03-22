@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78227a5f5ed2450a8b37b0e1821adcdc, type: 3}
   m_Name: ContactSenderBenchmark
   m_EditorClassIdentifier: 
-  initializationTime: 4
-  benchmarkTime: 4
-  iterationCount: 20
-  baseNum: 1.35
+  initializationTime: 2
+  benchmarkTime: 2
+  iterationCount: 30
+  baseNum: 1.2
   startVal: 20
   prefab: {fileID: 6875639689166666862, guid: 881d31bded165484dbb2097d1dd64069, type: 3}

@@ -21,6 +21,7 @@ public class ContactReceiverBenchmark: BenchmarkTask1d
 			ContactReceiver constraint = toggleObject.AddComponent<VRCContactReceiver>();
 			constraint.position = new Vector3(0, 0, i);
 			constraint.parameter = "test" + i.ToString();
+			constraint.collisionTags = new List<string>(){"test" + i.ToString()};
 		}
 		return gameObject;
 	}

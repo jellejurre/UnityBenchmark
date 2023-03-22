@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 67023736}
   - component: {fileID: 67023735}
   - component: {fileID: 67023737}
+  - component: {fileID: 67023738}
   m_Layer: 0
   m_Name: Util
   m_TagString: Untagged
@@ -151,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 954b3f968d9f43d0af618c558eff5898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controllerPath: Assets/jellejurre/Benchmarker/Assets/Generated/Controllers
+  controllerPath: 
 --- !u!4 &67023736
 Transform:
   m_ObjectHideFlags: 0
@@ -178,7 +179,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07009fff2ace49deaf807d7ff9da37c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 9100000, guid: 53f46ba704a87e44bbb1910bab4e34d5, type: 2}
+  controller: {fileID: 0}
+--- !u!114 &67023738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67023734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31b16a0ab1a042b1b18ca00cf56421b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 919132149155446097, guid: 1700a058d03ae804e9afd860a62129c1, type: 3}
+  amount: 532
 --- !u!1 &380812037
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7662863e6c9ca224bac65e0722bbe64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textAsset: {fileID: 4900000, guid: 19677cf0ed42513469a8d3402e684f34, type: 3}
+  textAsset: {fileID: 4900000, guid: b632a610b57fb3b459852a3a8c90bc2e, type: 3}
   drawFittedLine: 0
   visualisePercentage: 1
 --- !u!4 &2031972822

@@ -77324,7 +77324,7 @@ GameObject:
   - component: {fileID: 2873463813788400368}
   - component: {fileID: 6162115255435639785}
   m_Layer: 0
-  m_Name: Cube Humanoid(Clone)
+  m_Name: ManualTesting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
