@@ -83,7 +83,7 @@ if len(names) == 1:
     plt.ylabel("Time in seconds")
     vars = ["{:.3E}".format(var) for var in vars]
     plt.title(f"Fitted Curve: {vars[0]}x^2 + {vars[1]}x + {vars[2]}")
-    plt.savefig("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Graphs/" + sys.argv[1] + ".png")
+    plt.savefig("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Graphs/" + sys.argv[1] + ".png",  bbox_inches="tight")
     f = open("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Data/" + sys.argv[1] + ".txt", "w")
     f.write(f"{vars[0]},{vars[1]},{vars[2]}")
     f.close()
@@ -113,4 +113,4 @@ else:
         plt.contour(x1dis, x2dis, z.T)
     plt.rcParams["axes.titlesize"] = 10
     plt.title(f"Fitted Curve: {vars[0]} + {vars[1]}y + {vars[2]}y^2 + {vars[3]}x + {vars[4]}x*y + {vars[5]}x*y^2 + {vars[6]}x^2 + {vars[7]}x^2*y + {vars[8]}x^2 * y^2", wrap=True)
-    plt.savefig("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Graphs/" + sys.argv[1] + ".png")
+    plt.savefig("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Graphs/" + sys.argv[1] + ".png", bbox_inches="tight")

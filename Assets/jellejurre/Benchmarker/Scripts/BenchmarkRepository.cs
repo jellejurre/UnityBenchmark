@@ -51,8 +51,10 @@ public class BenchmarkRepository
 			GetOrCreate<SingleStateLayerBenchmark>("SingleStateLayerBenchmark.asset"),
 			GetOrCreate<SingleStateInactiveLayerBenchmark>("SingleInactiveStateLayerBenchmark.asset"),
 			GetOrCreate<ManyStatesConnectedBenchmark>("ManyStatesConnectedBenchmark.asset"),
+			GetOrCreate<ManyStatesConnectedBoolsBenchmark>("ManyStatesConnectedBoolsBenchmark.asset"),
 			GetOrCreate<ManyStatesDisconnectedBenchmark>("ManyStatesDisconnectedBenchmark.asset"),
 			GetOrCreate<TwoStateToggleBenchmark>("TwoStateToggleBenchmark.asset"),
+			GetOrCreate<TwoStateToggleBoolBenchmark>("TwoStateToggleBoolBenchmark.asset"),
 			GetOrCreate<TwoStateToggleWDOffBenchmark>("TwoStateToggleWDOffBenchmark.asset"),
 			GetOrCreate<TwoStateToggleActiveBenchmark>("TwoStateToggleActiveBenchmark.asset"),
 			GetOrCreate<TwoStateSubToggleBenchmark>("TwoSubStateToggleBenchmark.asset"),
@@ -73,6 +75,7 @@ public class BenchmarkRepository
 			GetOrCreate<AnyStateToggleActiveBenchmark>("AnyStateToggleActiveBenchmark.asset"),
 			GetOrCreate<AnyStateSelfToggleBenchmark>("AnyStateSelfToggleBenchmark.asset"),
 			GetOrCreate<AnyStateSelfToggleActiveBenchmark>("AnyStateSelfToggleActiveBenchmark.asset"),
+			GetOrCreate<AnyStateEdgeCaseBenchmark>("AnyStateEdgeCaseBenchmark.asset"),
 			GetOrCreate<AnyStateToggle2dBenchmark>("AnyStateToggle2dBenchmark.asset"),
 			GetOrCreate<AnyStateToggle2dActiveBenchmark>("AnyStateToggle2dActiveBenchmark.asset"),
 			GetOrCreate<AnyStateLayerState2dBenchmark>("AnyStateLayerState2dBenchmark.asset")

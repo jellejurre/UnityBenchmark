@@ -147,6 +147,63 @@ public class AnimatorHelpers
 		return controller;
 	}
 	
+		public static AnimatorController SetupAnyStateEdgeCase(int stateCount)
+	{
+		string path = "AnyStateEC/";
+		ReadyPath(controllerPath + path);
+		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + $"{path}/{stateCount}.controller");
+
+		if (controller != null)
+		{
+			RandomiseParameters(controller);
+			return controller;
+		}
+		AssetDatabase.StartAssetEditing();
+
+		controller = new AnimatorController();
+		AnimatorControllerLayer[] layers = new AnimatorControllerLayer[1];
+		AddParameters(controller, stateCount, true);
+		AnimatorControllerLayer layer = new AnimatorControllerLayer();
+		layer.name = 1.ToString();
+		AnimatorStateMachine stateMachine = new AnimatorStateMachine();
+		layer.stateMachine = stateMachine;
+		AnimatorStateTransition[] anyStates = new AnimatorStateTransition[stateCount];
+		ChildAnimatorState[] states = new ChildAnimatorState[stateCount];
+		for (int i = 0; i < stateCount; i++)
+		{
+			AnimationClip[] anims = AnimationHelper.GetOrCreateTwoStateToggle("test"+i.ToString(), i);
+			AnimatorState secondState = new AnimatorState();
+			secondState.name = "state" + i;
+			secondState.writeDefaultValues = true;
+			secondState.motion = anims[i%2];
+			var onTransition = new AnimatorStateTransition();
+			onTransition.conditions = new[]
+			{
+				new AnimatorCondition()
+				{
+					mode = AnimatorConditionMode.If,
+					parameter = i.ToString()
+				}
+			};
+			onTransition.hasExitTime = false;
+			onTransition.duration = 0;
+			onTransition.destinationState = secondState;
+			anyStates[i] = onTransition;
+			states[i] = new ChildAnimatorState(){state = secondState, position = Vector3.one};
+			onTransition.canTransitionToSelf = false;
+		}
+		layer.stateMachine.anyStateTransitions = anyStates;
+		layer.stateMachine.states = states;
+		layer.defaultWeight = 1;
+		layers[0] = layer;
+		controller.layers = layers;
+		AssetDatabase.CreateAsset(controller, controllerPath + $"{path}{stateCount}.controller");
+		SerializeController(controller);
+		AssetDatabase.StopAssetEditing();
+		RandomiseParameters(controller);
+		return controller;
+	}
+	
 	#endregion
 
 	#region nonAnyState
@@ -240,10 +297,10 @@ public class AnimatorHelpers
 		RandomiseParameters(controller);
 		return controller;
 	}
-	
-	public static AnimatorController SetupTwoToggles(int layerCount, bool writeDefaults = true)
+
+	public static AnimatorController SetupTwoToggles(int layerCount, bool writeDefaults = true, bool b = false)
 	{
-		string path = writeDefaults ? "TwoToggle/" : "TwoToggleWDOff/";
+		string path = b ? "TwoToggleBool/" : writeDefaults ? "TwoToggle/" : "TwoToggleWDOff/";
 		ReadyPath(controllerPath + path);
 		AnimatorController controller = 
 			AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
@@ -257,7 +314,7 @@ public class AnimatorHelpers
 		AssetDatabase.StartAssetEditing();
 		controller = new AnimatorController();
 		AnimatorControllerLayer[] layers = new AnimatorControllerLayer[layerCount];
-		AddParameters(controller, layerCount);
+		AddParameters(controller, layerCount, b);
 		AnimatorStateTransition[] transitions = new AnimatorStateTransition[layers.Length * 2];
 		for (int j = 0; j < layers.Length; j++)
 		{
@@ -286,8 +343,16 @@ public class AnimatorHelpers
 			offToOnTransition.hasExitTime = true;
 			onToOffTransition.destinationState = offState;
 			offToOnTransition.destinationState = onState;
-			onToOffTransition.AddCondition(AnimatorConditionMode.Greater, 0.5f, j.ToString());
-			offToOnTransition.AddCondition(AnimatorConditionMode.Less, 0.5f, j.ToString());
+			if (b)
+			{
+				onToOffTransition.AddCondition(AnimatorConditionMode.IfNot, 0.5f, j.ToString());
+				offToOnTransition.AddCondition(AnimatorConditionMode.If, 0.5f, j.ToString());
+			}
+			else
+			{
+				onToOffTransition.AddCondition(AnimatorConditionMode.Greater, 0.5f, j.ToString());
+				offToOnTransition.AddCondition(AnimatorConditionMode.Less, 0.5f, j.ToString());	
+			}
 			onState.AddTransition(onToOffTransition);
 			offState.AddTransition(offToOnTransition);
 			layer.stateMachine = stateMachine;
@@ -595,14 +660,14 @@ public class AnimatorHelpers
 		controller.parameters = parameters;
 	}
 
-	public static void AddParameters(AnimatorController controller, int count)
+	public static void AddParameters(AnimatorController controller, int count, bool b = false)
 	{
 		AnimatorControllerParameter[] parameters = new AnimatorControllerParameter[count];
 		for (int j = 0; j < count; j++)
 		{
 			string index = j.ToString();
 			AnimatorControllerParameter parameter = new AnimatorControllerParameter();
-			parameter.type = AnimatorControllerParameterType.Float;
+			parameter.type = b ? AnimatorControllerParameterType.Bool : AnimatorControllerParameterType.Float;
 			parameter.name = index;
 			parameters[j] = parameter;
 		}
