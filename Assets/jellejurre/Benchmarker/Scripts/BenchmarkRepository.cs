@@ -86,6 +86,7 @@ public class BenchmarkRepository
 		BenchmarkTask[] DirectBlendTreeSetups = new BenchmarkTask[]
 		{
 			GetOrCreate<DirectBlendTreeToggleBenchmark>("DirectBlendTreeToggleBenchmark.asset"),
+			GetOrCreate<DirectBlendTreeNestingBenchmark>("DirectBlendTreeNestingBenchmark.asset"),
 			GetOrCreate<DirectBlendTreeSingleBenchmark>("DirectBlendTreeSingleBenchmark.asset"),
 			GetOrCreate<DirectBlendTreeDefaultBenchmark>("DirectBlendTreeDefaultBenchmark.asset"),
 			GetOrCreate<DBTDefaultAnimBenchmark>("DBTDefaultAnimBenchmark.asset"),

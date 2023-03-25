@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -6,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Windows;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 using AnimatorControllerLayer = UnityEditor.Animations.AnimatorControllerLayer;
+using Random = UnityEngine.Random;
 
 public class AnimatorHelpers
 {
@@ -430,7 +432,7 @@ public class AnimatorHelpers
 	public static AnimatorController SetupDirectBlendTree(int layerCount)
 	{
 		string path = "DBT/";
-		ReadyPath(controllerPath + "TwoToggleSub/");
+		ReadyPath(controllerPath + path);
 		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
 
 		if (controller != null)
@@ -483,6 +485,77 @@ public class AnimatorHelpers
 		RandomiseParametersDBT(controller);
 		return controller;
 	}
+	
+		public static AnimatorController SetupNestedBlendTree(int splitCount, int maxAnims)
+	{
+		string path = "DBTNested/";
+		ReadyPath(controllerPath + path);
+		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + splitCount + ".controller");
+
+		if (controller != null)
+		{
+			RandomiseParametersDBT(controller);
+			return controller;
+		}
+		AssetDatabase.StartAssetEditing();
+
+		controller = new AnimatorController();
+		AddParameters(controller, maxAnims);
+		AnimatorControllerParameter oneParameter = new AnimatorControllerParameter();
+		oneParameter.name = "one";
+		oneParameter.defaultFloat = 1;
+		oneParameter.type = AnimatorControllerParameterType.Float;
+		controller.parameters = (new[] { oneParameter }).Concat(controller.parameters).ToArray();
+		AnimatorControllerLayer layer = new AnimatorControllerLayer();
+        layer.defaultWeight = 1;
+        layer.name = "ToggleTree";
+        layer.stateMachine = new AnimatorStateMachine();
+        AnimatorState treeState = new AnimatorState();
+        treeState.name = "ToggleTree";
+        int animIndex = 0;
+        Motion motion = RecurseBlendTree(splitCount, (int) (maxAnims/(Math.Pow(2, splitCount))), ref animIndex);
+        treeState.motion = motion;
+        layer.stateMachine.AddState(treeState, Vector3.one);
+		controller.layers = new []{layer};
+		AssetDatabase.CreateAsset(controller, controllerPath + path + splitCount + ".controller");
+		SerializeController(controller);
+		AssetDatabase.StopAssetEditing();
+		RandomiseParametersDBT(controller);
+		return controller;
+	}
+
+		public static Motion RecurseBlendTree(int layerCount, int treesPerLayer, ref int currentAnim)
+		{
+			if (layerCount == 0)
+			{
+				BlendTree child = new BlendTree();
+				child.name = currentAnim.ToString();
+				child.blendType = BlendTreeType.Simple1D;
+				child.blendParameter = currentAnim.ToString();
+				AnimationClip[] anims = AnimationHelper.GetOrCreateTwoStateToggle("test"+currentAnim.ToString(), currentAnim);
+				child.AddChild(anims[1]);
+				child.AddChild(anims[0]);
+				child.hideFlags = HideFlags.HideInHierarchy;
+				currentAnim++;
+				return child;
+			}
+			BlendTree bigTree = new BlendTree();
+			bigTree.name = "tree";
+			bigTree.blendType = BlendTreeType.Direct;
+			int amount = (layerCount == 1) ? treesPerLayer : 2;
+			for (int i = 0; i < amount; i++)
+			{
+				bigTree.AddChild(RecurseBlendTree(layerCount - 1, treesPerLayer, ref currentAnim));
+			}
+			ChildMotion[] childMotions = bigTree.children;
+			for (var i = 0; i < childMotions.Length; i++)
+			{
+				childMotions[i].directBlendParameter = "one";
+				childMotions[i].motion.hideFlags = HideFlags.HideInHierarchy;
+			}
+			bigTree.children = childMotions;
+			return bigTree;
+		}
 	
 	
 	public static AnimatorController SetupSingleDirectBlendTree(int layerCount, bool defaultsLayer = false, bool singleAnim = false)
