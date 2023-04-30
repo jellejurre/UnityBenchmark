@@ -166,6 +166,17 @@ public class BenchmarkRepository
 		};
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(Audio, "AudioSources"));
+		
+		BenchmarkTask[] Cloth = new BenchmarkTask[]
+		{
+			GetOrCreate<ClothVertexCountInactiveBenchmark>("ClothVertexCountInactiveBenchmark.asset"),
+			GetOrCreate<ClothVertexCountActiveBenchmark>("ClothVertexCountActiveBenchmark.asset"),
+			GetOrCreate<ClothVertexCountMeshCountBenchmark>("ClothVertexCountMeshCountBenchmark.asset"),
+			GetOrCreate<ClothColliderCountActiveBenchmark>("ClothColliderCountActiveBenchmark.asset"),
+			GetOrCreate<ClothCapsuleCountActiveBenchmark>("ClothCapsuleCountActiveBenchmark.asset")
+		};
+		
+		benchmarkTasks.Add(new BenchmarkTaskGroup(Cloth, "Cloth"));
 	}
 
 	public static BenchmarkTask GetNext(BenchmarkTask current)

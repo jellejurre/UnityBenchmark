@@ -4,40 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import griddata
 def polyfit2d(x, y, z, kx=3, ky=3, order=None):
-    '''
-    Two dimensional polynomial fitting by least squares.
-    Fits the functional form f(x,y) = z.
-
-    Notes
-    -----
-    Resultant fit can be plotted with:
-    np.polynomial.polynomial.polygrid2d(x, y, soln.reshape((kx+1, ky+1)))
-
-    Parameters
-    ----------
-    x, y: array-like, 1d
-        x and y coordinates.
-    z: np.ndarray, 2d
-        Surface to fit.
-    kx, ky: int, default is 3
-        Polynomial order in x and y, respectively.
-    order: int or None, default is None
-        If None, all coefficients up to maxiumum kx, ky, ie. up to and including x^kx*y^ky, are considered.
-        If int, coefficients up to a maximum of kx+ky <= order are considered.
-
-    Returns
-    -------
-    Return paramters from np.linalg.lstsq.
-
-    soln: np.ndarray
-        Array of polynomial coefficients.
-    residuals: np.ndarray
-    rank: int
-    s: np.ndarray
-
-    '''
-
-    # grid coords
     x, y = np.meshgrid(x, y)
     # coefficient array, up to x^kx, y^ky
     coeffs = np.ones((kx+1, ky+1))
@@ -94,7 +60,7 @@ else:
     fig, ax = plt.subplots()
     im = ax.scatter(x1s, x2s, c=ys)
     fig.colorbar(im, ax=ax)
-    A = np.array([np.ones(x1s.shape), x2s, x2s**2, x1s, x1s*x2s, x1s*x2s**2, x1s**2, x1s**2*x2s, x1s**2*x2s**2]).T
+    A = np.array([np.ones(x1s.shape), x2s, x2s**2, x1s, x1s*x2s, x1s*x2s**2, x1s**2, x1s**2*x2s, (x1s**2)*(x2s**2)]).T
     B = ys.flatten()
     coeff, r, rank, s = np.linalg.lstsq(A, B, rcond = None)
     plt.xlabel(names[0])
@@ -112,5 +78,5 @@ else:
     if (sys.argv[3]=="True"):
         plt.contour(x1dis, x2dis, z.T)
     plt.rcParams["axes.titlesize"] = 10
-    plt.title(f"Fitted Curve: {vars[0]} + {vars[1]}y + {vars[2]}y^2 + {vars[3]}x + {vars[4]}x*y + {vars[5]}x*y^2 + {vars[6]}x^2 + {vars[7]}x^2*y + {vars[8]}x^2 * y^2", wrap=True)
+    plt.title(f"Fitted Curve: {vars[0]} + {vars[1]}y + {vars[2]}y^2\n + {vars[3]}x + {vars[4]}x*y + {vars[5]}x*y^2\n + {vars[6]}x^2 + {vars[7]}x^2*y + {vars[8]}x^2 * y^2", wrap=True)
     plt.savefig("Assets/jellejurre/Benchmarker/Output/" + sys.argv[2] + "/Graphs/" + sys.argv[1] + ".png", bbox_inches="tight")

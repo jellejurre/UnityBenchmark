@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4c58715665245e9924f89ce0af899fa, type: 3}
-  m_Name: ContactComboActiveBenchmark
+  m_Script: {fileID: 11500000, guid: d1f538cc8d7c4013bbd5836c950bc8d0, type: 3}
+  m_Name: ClothColliderCountActiveBenchmark
   m_EditorClassIdentifier: 
   initializationTime: 2
   benchmarkTime: 2
-  iterationCount: 30
-  baseNum: 1.2
-  startVal: 1000
-  prefab: {fileID: 6875639689166666862, guid: 881d31bded165484dbb2097d1dd64069, type: 3}
-  current: 0
-  objects: []
+  iterationCount: 11
+  baseNum: 1.5
+  startVal: 2
+  prefab: {fileID: 919132149155446097, guid: 1700a058d03ae804e9afd860a62129c1, type: 3}
