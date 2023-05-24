@@ -177,6 +177,17 @@ public class BenchmarkRepository
 		};
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(Cloth, "Cloth"));
+		
+		// BenchmarkTask[] Physbones = new BenchmarkTask[]
+		// {
+		// 	GetOrCreate<PhysboneChildCount>("PhysboneChildCount.asset"),
+		// 	GetOrCreate<ForkedPhysboneChildCount>("ForkedPhysboneChildCount.asset"),
+		// 	GetOrCreate<PhysboneColliderCount>("PhysboneColliderCount.asset"),
+		// 	GetOrCreate<PhysboneChildCountAnimated>("PhysboneChildCountAnimated.asset"),
+		// 	GetOrCreate<PhysboneChildCountDepth>("PhysboneChildCountDepth.asset")
+		// };
+		//
+		// benchmarkTasks.Add(new BenchmarkTaskGroup(Physbones,"Physbones"));
 	}
 
 	public static BenchmarkTask GetNext(BenchmarkTask current)

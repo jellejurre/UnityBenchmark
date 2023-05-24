@@ -213,7 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cloth: {fileID: 0}
   renderer: {fileID: 0}
-  vertexCount: 346
+  vertexCount: 0
 --- !u!1 &380812037
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7662863e6c9ca224bac65e0722bbe64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textAsset: {fileID: 0}
+  textAsset: {fileID: 4900000, guid: bdad620faba391e43bc408fa0e74aaae, type: 3}
   drawFittedLine: 0
   visualisePercentage: 0
 --- !u!4 &2031972822
