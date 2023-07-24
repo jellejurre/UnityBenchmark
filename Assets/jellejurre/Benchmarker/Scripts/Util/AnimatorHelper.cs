@@ -210,6 +210,97 @@ public class AnimatorHelpers
 
 	#region nonAnyState
 
+	public static AnimatorController SetupManyStateToggleDelayed(int layerCount, int stateCount)
+	{
+		ReadyPath(controllerPath + "ManyStateDelayed/");
+		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + $"ManyStateDelayed/{layerCount}_{stateCount}.controller");
+
+		if (controller != null)
+		{
+			RandomiseParameters(controller);
+			return controller;
+		}
+		AssetDatabase.StartAssetEditing();
+
+		controller = new AnimatorController();
+		AnimatorControllerLayer[] layers = new AnimatorControllerLayer[layerCount];
+		AnimatorStateTransition[] transitions = new AnimatorStateTransition[layers.Length * stateCount * 3];
+		AddParameters(controller, layerCount);
+		for (int j = 0; j < layers.Length; j++)
+		{
+			string index = j.ToString();
+			AnimatorControllerLayer layer = new AnimatorControllerLayer();
+			layer.name = index;
+			AnimatorStateMachine stateMachine = new AnimatorStateMachine();
+			layer.stateMachine = stateMachine;
+			AnimationClip[] anims = AnimationHelper.GetOrCreateTwoStateToggle("test"+j.ToString(), j);
+			AnimatorState firstState = new AnimatorState();
+			firstState.name = "state1";
+			firstState.writeDefaultValues = false;
+			firstState.motion = anims[0];
+			ChildAnimatorState[] states = new ChildAnimatorState[stateCount + 1];
+			for (int i = 0; i < stateCount; i++)
+			{
+				AnimationClip[] animsDelayed = AnimationHelper.GetOrCreateTwoStateToggleDelayed("test"+j.ToString(), j, i);
+				AnimatorState secondState = new AnimatorState();
+				secondState.name = "state" + i;
+				secondState.writeDefaultValues = false;
+				secondState.motion = animsDelayed[1];
+				AnimatorStateTransition onTransition = new AnimatorStateTransition();
+				onTransition.destinationState = secondState;
+				firstState.transitions = new[] { onTransition };
+				AnimatorStateTransition offTransition = new AnimatorStateTransition();
+				AnimatorStateTransition off2Transition = new AnimatorStateTransition();
+				offTransition.destinationState = firstState;
+				off2Transition.destinationState = secondState;
+				secondState.transitions = new[] { off2Transition, offTransition };
+				transitions[3 * (j * stateCount + i)] = onTransition;
+				transitions[3 * (j * stateCount + i) + 1] = offTransition;
+				transitions[3 * (j * stateCount + i) + 2] = off2Transition;
+				onTransition.conditions = new[]
+				{
+					new AnimatorCondition()
+					{
+						mode = AnimatorConditionMode.Greater, threshold = i / ((float)stateCount),
+						parameter = j.ToString()
+					},
+					new AnimatorCondition()
+					{
+						mode = AnimatorConditionMode.Less, threshold = (1+i) / ((float)stateCount),
+						parameter = j.ToString()
+					}
+				};
+				offTransition.conditions = new[]
+				{
+					new AnimatorCondition()
+					{
+						mode = AnimatorConditionMode.Less, threshold = i / ((float)stateCount), parameter = j.ToString()
+					}
+				};
+				off2Transition.conditions = new[]
+				{
+					new AnimatorCondition()
+					{
+						mode = AnimatorConditionMode.Greater, threshold = (i + 1) / (float)stateCount,
+						parameter = j.ToString()
+					}
+				};
+				states[i] = new ChildAnimatorState(){state = secondState, position = Vector3.one};
+			}
+
+			states[stateCount] =  new ChildAnimatorState(){state = firstState, position = Vector3.one};
+			layer.stateMachine.states = states;
+			layer.defaultWeight = 1;
+			layers[j] = layer;
+		}
+		controller.layers = layers;
+		AssetDatabase.CreateAsset(controller,  controllerPath + $"ManyStateDelayed/{layerCount}_{stateCount}.controller");
+		SerializeController(controller);
+		AssetDatabase.StopAssetEditing();
+		RandomiseParameters(controller);
+		return controller;
+	}
+	
 	public static AnimatorController SetupManyStateToggle(int layerCount, int stateCount)
 	{
 		ReadyPath(controllerPath + "ManyState/");

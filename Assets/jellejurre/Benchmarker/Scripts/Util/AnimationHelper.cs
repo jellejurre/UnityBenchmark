@@ -38,6 +38,36 @@ public class AnimationHelper
 		return new[] { onClip, offClip };
 	}
 	
+	public static AnimationClip[] GetOrCreateTwoStateToggleDelayed(string path, int i, int endFrame)
+	{ 
+		string delayPath = animationPath + "Delayed/";
+		ReadyPath(delayPath);
+		string onName = "GameObjectOn" + i + "-" + endFrame;
+		string offName = "GameObjectOff" + i + "-" + endFrame;
+		AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(delayPath + onName + ".anim");
+		AnimationClip clip2 = AssetDatabase.LoadAssetAtPath<AnimationClip>(delayPath + offName + ".anim");
+		if (clip != null && clip2 != null)
+		{
+			return new[] { clip, clip2 };
+		}
+
+		AnimationClip onClip = new AnimationClip();
+		AnimationClip offClip = new AnimationClip();
+		onClip.name = onName;
+		offClip.name = offName;
+		EditorCurveBinding binding = new EditorCurveBinding();
+		binding.path = path;
+		binding.type = typeof(GameObject);
+		binding.propertyName = "m_IsActive";
+		AnimationCurve curveOn = AnimationCurve.Linear(0, 1, endFrame/60f, 1);
+		AnimationCurve curveOff = AnimationCurve.Linear(0, 0, endFrame/60f, 0);
+		AnimationUtility.SetEditorCurve(onClip, binding, curveOn);
+		AnimationUtility.SetEditorCurve(offClip, binding, curveOff);
+		AssetDatabase.CreateAsset(onClip, delayPath + onName + ".anim");
+		AssetDatabase.CreateAsset(offClip, delayPath + offName + ".anim");
+		return new[] { onClip, offClip };
+	}
+	
 	public static AnimationClip GetOrCreateBigOnToggle(string path, int i)
 	{
 		ReadyPath(animationPath);

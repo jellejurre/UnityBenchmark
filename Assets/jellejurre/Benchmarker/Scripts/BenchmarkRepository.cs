@@ -63,6 +63,7 @@ public class BenchmarkRepository
 			GetOrCreate<BigTwoStateToggle2dBenchmark>("BigTwoStateToggle2dBenchmark.asset"),
 			GetOrCreate<BigTwoStateToggleActive2dBenchmark>("BigTwoStateToggleActive2dBenchmark.asset"),
 			GetOrCreate<ManyStateLayerState2dBenchmark>("ManyStateLayerState2dBenchmark.asset"),
+			GetOrCreate<ManyStateLayerStateDelayed2dBenchmark>("ManyStateLayerStateDelayed2dBenchmark.asset")
 		};
 
 		benchmarkTasks.Add(new BenchmarkTaskGroup(LayerSetups, "NonAnyStateLayers"));
