@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Windows;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 using AnimatorControllerLayer = UnityEditor.Animations.AnimatorControllerLayer;
 using Random = UnityEngine.Random;
@@ -16,9 +15,10 @@ public class AnimatorHelpers
 	public static void ReadyPath(string folderPath)
 	{
 		folderPath = folderPath.Substring(0 , folderPath.Length - 1);
-		if (Directory.Exists(folderPath)) return;
-		Directory.CreateDirectory(controllerPath);
-		Directory.CreateDirectory(folderPath);
+		if (System.IO.Directory.Exists(folderPath)) return;
+		System.IO.Directory.CreateDirectory(controllerPath.Substring(0, controllerPath.Length - 1));
+		AssetDatabase.ImportAsset(controllerPath.Substring(0, controllerPath.Length - 1));
+		System.IO.Directory.CreateDirectory(folderPath);
 		AssetDatabase.ImportAsset(folderPath);
 	}
 	
