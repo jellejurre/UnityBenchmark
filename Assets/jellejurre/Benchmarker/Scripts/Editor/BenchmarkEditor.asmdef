@@ -1,0 +1,21 @@
+{
+    "name": "BenchmarkEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f88fbfee83b1da4408bb5befc5e6e2bd",
+        "GUID:3456780c4fb2d324ab9c633d6f1b0ddb",
+        "GUID:5718fb738711cd34ea54e9553040911d",
+        "GUID:0f9e8f73c69964f1e8176f9a0b86f9b2"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

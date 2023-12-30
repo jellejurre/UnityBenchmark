@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using Random = System.Random;
 
@@ -32,6 +31,8 @@ public class BenchmarkRunner : MonoBehaviour
 		SetupIteration();
 	}
 
+	public static GameObject cubePrefab;
+
 	private void SetupIteration()
 	{
 		restart = true;
@@ -42,12 +43,14 @@ public class BenchmarkRunner : MonoBehaviour
 
 		if (prefab == null)
 		{
-			prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/jellejurre/Benchmarker/Assets/Prefabs/Cube.prefab");
+			prefab = cubePrefab;
 		}
 
 		currentObject = task.PrepareIteration(prefab, currentIteration);
 	}
 
+	public static Action<BenchmarkData> ProcessBenchmark;
+	
 	private void Update()
 	{
 		if (task == null)
@@ -75,13 +78,12 @@ public class BenchmarkRunner : MonoBehaviour
 			if (currentIteration == task.GetMaxIterations())
 			{
 				gameObject.SetActive(false);
-				BenchmarkManager.ProcessBenchmarkData(new BenchmarkData(data));
+				ProcessBenchmark(new BenchmarkData(data));
 			}
 			else
 			{
 				SetupIteration();
 			}
 		}
-		
 	}
 }

@@ -27,6 +27,9 @@ public class BenchmarkManager
 				.Append(new EditorBuildSettingsScene("Assets/jellejurre/Benchmarker/Assets/BenchmarkScene.unity", true))
 				.ToArray();
 		}
+
+		BenchmarkRunner.ProcessBenchmark = ProcessBenchmarkData;
+		BenchmarkRunner.cubePrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/jellejurre/Benchmarker/Assets/Prefabs/Cube.prefab");
 	}
 
 	public static void LoadSceneAndRun(BenchmarkTask task)

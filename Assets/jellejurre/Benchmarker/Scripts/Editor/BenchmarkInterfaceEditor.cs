@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-
-public class BenchmarkInterface : MonoBehaviour
-{ }
 
 [CustomEditor(typeof(BenchmarkInterface))]
 public class BenchmarkerEditor : Editor
@@ -43,7 +38,7 @@ public class BenchmarkerEditor : Editor
 			taskGroup.shown = EditorGUILayout.Foldout(taskGroup.shown, taskGroup.name);
 			if (taskGroup.shown)
 			{
-				taskGroup.Visualise();
+				BenchmarkVisualiserEditor.VisualiseGroup(taskGroup);
 			}
 		}
 	}
