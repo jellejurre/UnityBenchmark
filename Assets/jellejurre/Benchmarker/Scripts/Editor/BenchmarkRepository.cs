@@ -183,6 +183,23 @@ public class BenchmarkRepository
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(Cloth, "Cloth"));
 		
+		BenchmarkTask[] MeshProperties = new BenchmarkTask[]
+		{
+			GetOrCreate<MaterialCountBenchmark>("MaterialCountBenchmark.asset"),
+			GetOrCreate<MaterialCount2dBenchmark>("MaterialCount2dBenchmark.asset"),
+			GetOrCreate<BlendShapeCountBenchmark>("BlendShapeCountBenchmark.asset"),
+			GetOrCreate<BlendShapeActiveCountBenchmark>("BlendShapeActiveCountBenchmark.asset"),
+			GetOrCreate<BlendShapeVertexActiveCountBenchmark>("BlendShapeVertexActiveCountBenchmark.asset"),
+			GetOrCreate<BlendShapeSingleCountBenchmark>("BlendShapeSingleCountBenchmark.asset"),
+			GetOrCreate<BlendShapeSingleActiveCountBenchmark>("BlendShapeSingleActiveCountBenchmark.asset"),
+			GetOrCreate<BlendShapeActiveVariableCountBenchmark>("BlendShapeActiveVariableCountBenchmark.asset"),
+			GetOrCreate<BoneActiveCountBenchmark>("BoneActiveCountBenchmark.asset"),
+			GetOrCreate<BoneCountBenchmark>("BoneCountBenchmark.asset"),
+			GetOrCreate<BoneVertexCountBenchmark>("BoneVertexCountBenchmark.asset"),
+			GetOrCreate<VertexCountBenchmark>("VertexCountBenchmark.asset"),
+		};
+		
+		benchmarkTasks.Add(new BenchmarkTaskGroup(MeshProperties, "MeshProperties"));
 		// BenchmarkTask[] Physbones = new BenchmarkTask[]
 		// {
 		// 	GetOrCreate<PhysboneChildCount>("PhysboneChildCount.asset"),

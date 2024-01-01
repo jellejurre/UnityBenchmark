@@ -383,9 +383,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7662863e6c9ca224bac65e0722bbe64a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textAsset: {fileID: 4900000, guid: 9c38bee79ea16c8499f8f00711b06701, type: 3}
+  textAsset: {fileID: 4900000, guid: cbe82bc9afd65104fae11a171ec386c2, type: 3}
   drawFittedLine: 1
-  visualisePercentage: 1
+  visualisePercentage: 0
 --- !u!4 &2031972822
 Transform:
   m_ObjectHideFlags: 0

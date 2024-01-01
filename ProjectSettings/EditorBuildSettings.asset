@@ -9,5 +9,7 @@ EditorBuildSettings:
     path: Assets/jellejurre/Benchmarker/Assets/BenchmarkScene.unity
     guid: 39cb74d4748356947b02780695f4d73b
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 6f8bc3e0ffcaf6442b3fc6b77ff207a7,
+      type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: dc83680396cf599409913e4edb065f4e,
       type: 2}

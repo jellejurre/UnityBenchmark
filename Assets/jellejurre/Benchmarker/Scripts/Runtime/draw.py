@@ -32,11 +32,12 @@ if len(names) == 1:
     xs = [int(spl.split(",")[0]) for spl in lines]
     ys = [float(spl.split(",")[1]) for spl in lines]
     maxVal = max(xs)
-    newLines = []
-    for i in range(len(xs)):
-        if(xs[i] < maxVal * percentage):
-            newLines.append(lines[i])
-    lines = newLines
+    if percentage != 0:
+        newLines = []
+        for i in range(len(xs)):
+            if(xs[i] < maxVal * percentage):
+                newLines.append(lines[i])
+        lines = newLines
     xs = [int(spl.split(",")[0]) for spl in lines]
     ys = [float(spl.split(",")[1]) for spl in lines]
     plt.plot(xs, ys)

@@ -17,7 +17,7 @@ public class AnimationAdderEditor : Editor
 	
 	public void DoThing(AnimationAdder adder)
 	{
-		AnimatorControllerLayer[] layers = adder.controller.layers;
+		AnimatorControllerLayer[] layers = ((AnimatorController)adder.controller).layers;
 		adder.index = 0;
 		for (var i = 0; i < layers.Length; i++)
 		{
@@ -32,7 +32,7 @@ public class AnimationAdderEditor : Editor
 			layers[i] = l;
 		}
 
-		adder.controller.layers = layers;
+		((AnimatorController)adder.controller).layers = layers;
 	}
 
 	public Motion AssignStates(Motion motion, AnimationAdder adder)

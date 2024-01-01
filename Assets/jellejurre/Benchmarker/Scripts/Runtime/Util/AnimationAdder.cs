@@ -1,8 +1,7 @@
-﻿using UnityEditor.Animations;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AnimationAdder : MonoBehaviour
 {
-	public AnimatorController controller;
+	public Object controller;
 	public int index;
 }
