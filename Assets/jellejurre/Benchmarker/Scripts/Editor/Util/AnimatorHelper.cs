@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+using static ControllerGenerationMethods;
 using AnimatorController = UnityEditor.Animations.AnimatorController;
 using AnimatorControllerLayer = UnityEditor.Animations.AnimatorControllerLayer;
 using Random = UnityEngine.Random;
@@ -577,6 +578,273 @@ public class AnimatorHelpers
 		return controller;
 	}
 	
+	public static AnimatorController SetupExponentialBlendTree(int layerCount)
+	{
+		string path = "DBTExp/";
+		ReadyPath(controllerPath + path);
+		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
+
+		if (controller != null)
+		{
+			return controller;
+		}
+		AssetDatabase.StartAssetEditing();
+
+		controller = new AnimatorController();
+		controller.parameters = Enumerable.Range(0, layerCount)
+			.Select(x => GenerateFloatParameter(x.ToString()))
+			.Concat(Enumerable.Range(0, layerCount).Select(x => GenerateFloatParameter("Output"+x.ToString())))
+			.Append(GenerateFloatParameter("SmoothAmount", defaultFloat: 0.9f))
+			.Append(GenerateFloatParameter("one", 1))
+			.ToArray();
+
+		List<BlendTree> trees = new List<BlendTree>();
+		ReadyPath(AnimationHelper.animationPath + "DBT/");
+
+		for (int i = 0; i < layerCount; i++)
+		{
+			string onName = AnimationHelper.animationPath + "DBT/GameObjectOn" + i + "Output" + i + ".anim";
+			string offName = AnimationHelper.animationPath + "DBT/GameObjectOff" + i + "Output" + i + ".anim";
+			AnimationClip onClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(onName);
+			AnimationClip offClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(offName);
+
+			if (onClip == null)
+			{
+				onClip = GenerateClip($"Output{i}On");
+				AddCurve(onClip, "test" + i, typeof(GameObject), "m_IsActive", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 1f), GenerateKeyFrame(time: 0.01666667f, value: 1f) }));
+				AddCurve(onClip, "", typeof(UnityEngine.Animator), "Output" + i, GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 1f), GenerateKeyFrame(time: 0.01666667f, value: 1f) }));
+
+				offClip = GenerateClip($"Output{i}Off");
+				AddCurve(offClip, "test" + i, typeof(GameObject), "m_IsActive", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 0f), GenerateKeyFrame(time: 0.01666667f, value: 0) }));
+				AddCurve(offClip, "", typeof(UnityEngine.Animator), "Output" + i, GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 0f), GenerateKeyFrame(time: 0.01666667f, value: 0f)}));
+
+				AssetDatabase.CreateAsset(onClip, onName);
+				AssetDatabase.CreateAsset(offClip, offName);
+			}
+
+			BlendTree TreeSmoothedValueValue = GenerateBlendTree("Smoothed Value = Value", BlendTreeType.Simple1D, blendParameter: i.ToString(), maxThreshold: 1, minThreshold: 0);
+			TreeSmoothedValueValue.children = new ChildMotion[] {
+				GenerateChildMotion(offClip,  threshold: 0f, directBlendParameter: "Value"), 
+				GenerateChildMotion(onClip,  threshold: 1f, directBlendParameter: "Value")
+			};
+
+			BlendTree TreeSmoothedValueSmoothedValue = GenerateBlendTree("Smoothed Value = Smoothed Value", BlendTreeType.Simple1D, blendParameter: "Output" + i, maxThreshold: 1, minThreshold: 0);
+
+			TreeSmoothedValueSmoothedValue.children = new ChildMotion[] {
+				GenerateChildMotion(offClip,  threshold: 0f, directBlendParameter: "Value"), 
+				GenerateChildMotion(onClip,  threshold: 1f, directBlendParameter: "Value")
+			};
+
+			BlendTree TreeExponentialSmoothing = GenerateBlendTree("Exponential Smoothing" + i, BlendTreeType.Simple1D, blendParameter: "SmoothAmount", maxThreshold: 1f); 
+			TreeExponentialSmoothing.children = new ChildMotion[] {
+				GenerateChildMotion(TreeSmoothedValueValue,  threshold: 0f), 
+				GenerateChildMotion(TreeSmoothedValueSmoothedValue,  threshold: 1f)
+			};
+			trees.Add(TreeExponentialSmoothing);
+		}
+		
+		BlendTree BigBlendTree = GenerateBlendTree("Parent Blend Tree", BlendTreeType.Direct);
+		BigBlendTree.children = trees.Select(x => GenerateChildMotion(x, directBlendParameter: "one")).ToArray();
+		
+		AnimatorState StateExponentialSmoothing = GenerateState("Exponential Smoothing", motion: BigBlendTree);
+		
+		ChildAnimatorState[] states = new ChildAnimatorState[] {
+			GenerateChildState(new Vector3(280f, 120f, 0f), StateExponentialSmoothing)
+		};
+
+		AnimatorStateMachine StateMachineExponentialSmoothingLayer = GenerateStateMachine("Exponential Smoothing Layer", new Vector3(50f, 20f, 0f), new Vector3(50f, 120f, 0f), new Vector3(800f, 120f, 0f), states: states, defaultState: StateExponentialSmoothing);
+		AnimatorControllerLayer ExponentialSmoothingLayer = GenerateLayer("Exponential Smoothing Layer", StateMachineExponentialSmoothingLayer);
+        
+		controller.layers = new []{ExponentialSmoothingLayer};
+		AssetDatabase.CreateAsset(controller, controllerPath + path + layerCount + ".controller");
+		SerializeController(controller);
+		AssetDatabase.StopAssetEditing();
+		return controller;
+	}
+	
+	
+	public static AnimatorController SetupLinearBlendTree(int layerCount)
+	{
+		string path = "DBTLinear/";
+		ReadyPath(controllerPath + path);
+		AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath + path + layerCount + ".controller");
+
+		if (controller != null)
+		{
+			return controller;
+		}
+		AssetDatabase.StartAssetEditing();
+
+		controller = new AnimatorController();
+		controller.parameters = Enumerable.Range(0, layerCount)
+			.Select(x => GenerateFloatParameter(x.ToString()))
+			.Concat(Enumerable.Range(0, layerCount).Select(x => GenerateFloatParameter("Output"+x.ToString())))
+			.Concat(Enumerable.Range(0, layerCount).Select(x => GenerateFloatParameter("InputOutputDelta"+x.ToString())))
+			.Append(GenerateFloatParameter("One", 1))
+			.Append(GenerateFloatParameter("StepSize", defaultFloat: 0.05f))
+			.Append(GenerateFloatParameter("Time"))
+			.Append(GenerateFloatParameter("LastTime"))
+			.Append(GenerateFloatParameter("FrameTime"))
+			.ToArray();
+
+		
+		ReadyPath(AnimationHelper.animationPath + "DBT/");
+		string timeName = AnimationHelper.animationPath + "DBT/Time.anim";
+		string time1Name = AnimationHelper.animationPath + "DBT/Time1.anim";
+		string timeMinus1Name = AnimationHelper.animationPath + "DBT/Time-1.anim";
+		string lastTime1Name = AnimationHelper.animationPath + "DBT/LastTime1.anim";
+		AnimationClip timeClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(timeName);
+		AnimationClip time1Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(time1Name);
+		AnimationClip timeMinus1Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(timeMinus1Name);
+		AnimationClip lastTime1Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(lastTime1Name);
+
+		if (timeClip == null)
+		{
+			timeClip = GenerateClip("Time");
+			AddCurve(timeClip, "", typeof(UnityEngine.Animator), "Time", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(outTangent: 1f), GenerateKeyFrame(time: 20000f, value: 20000f, inTangent: 1f) }));
+
+			time1Clip = GenerateClip("FrameTime1");
+			AddCurve(time1Clip, "", typeof(UnityEngine.Animator), "FrameTime", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 1f), GenerateKeyFrame(time: 0.01666667f, value: 1f) }));
+
+			timeMinus1Clip = GenerateClip("FrameTime-1");
+			AddCurve(timeMinus1Clip, "", typeof(UnityEngine.Animator), "FrameTime", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: -1f), GenerateKeyFrame(time: 0.01666667f, value: -1f) }));
+
+			lastTime1Clip = GenerateClip("LastTime1");
+			AddCurve(lastTime1Clip, "", typeof(UnityEngine.Animator), "LastTime", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 1f), GenerateKeyFrame(time: 0.01666667f, value: 1f) }));
+			
+			AssetDatabase.CreateAsset(timeClip, timeName);
+			AssetDatabase.CreateAsset(time1Clip, time1Name);
+			AssetDatabase.CreateAsset(timeMinus1Clip, timeMinus1Name);
+			AssetDatabase.CreateAsset(lastTime1Clip, lastTime1Name);
+		}
+
+
+		AnimatorState StateTime = GenerateState("Time", writeDefaultValues: true, motion: timeClip);
+
+		ChildAnimatorState[] timeStates = new ChildAnimatorState[] {
+			GenerateChildState(new Vector3(310f, 110f, 0f), StateTime)
+		};
+		AnimatorStateMachine StateMachineTime = GenerateStateMachine("Time", new Vector3(50f, 20f, 0f), new Vector3(50f, 120f, 0f), new Vector3(800f, 120f, 0f), states: timeStates, defaultState: StateTime);
+		AnimatorControllerLayer LayerTime = GenerateLayer("Time", StateMachineTime, defaultWeight: 0f);
+		
+		
+		BlendTree TreeDeltaTime = GenerateBlendTree("DeltaTime", BlendTreeType.Direct, blendParameter: "One", blendParameterY: "One", maxThreshold: 1f);
+		TreeDeltaTime.children = new ChildMotion[] {
+			GenerateChildMotion(time1Clip,  directBlendParameter: "Time"), 
+			GenerateChildMotion(timeMinus1Clip,  threshold: 1f, directBlendParameter: "LastTime")
+		};
+		
+		
+		List<BlendTree> trees = new List<BlendTree>();
+		for (int i = 0; i < layerCount; i++)
+		{
+			string IODMinus100Name = AnimationHelper.animationPath + $"DBT/InputOutputDelta-100-{i}.anim";
+			string IOD100Name = AnimationHelper.animationPath + $"DBT/InputOutputDelta100-{i}.anim";;
+			string output0Name = AnimationHelper.animationPath + $"DBT/OutputLinear0-{i}.anim";;
+			string output1Name = AnimationHelper.animationPath + $"DBT/OutputLinear1-{i}.anim";;
+			string outputMinus1Name = AnimationHelper.animationPath + $"DBT/OutputLinear-1-{i}.anim";;
+			string output100Name = AnimationHelper.animationPath + $"DBT/OutputLinear100-{i}.anim";;
+			string outputMinus100Name = AnimationHelper.animationPath + $"DBT/OutputLinear-100-{i}.anim";;
+
+			AnimationClip IODMinus100Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(IODMinus100Name);
+			AnimationClip IOD100Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(IOD100Name);
+			AnimationClip output0Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(output0Name);
+			AnimationClip output1Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(output1Name);
+			AnimationClip outputMinus1Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(outputMinus1Name);
+			AnimationClip output100Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(output100Name);
+			AnimationClip outputMinus100Clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(outputMinus100Name);
+
+			if (IODMinus100Clip == null)
+			{
+				IODMinus100Clip = GenerateClip("InputOutputDelta-100");
+				AddCurve(IODMinus100Clip, "", typeof(UnityEngine.Animator), "InputOutputDelta" + i, GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: -100f), GenerateKeyFrame(time: 0.01666667f, value: -100f) }));
+
+				IOD100Clip = GenerateClip("InputOutputDelta100");
+				AddCurve(IOD100Clip, "", typeof(UnityEngine.Animator), "InputOutputDelta" + i, GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 100f), GenerateKeyFrame(time: 0.01666667f, value: 100f) }));
+
+				outputMinus100Clip = GenerateClip("Output-100");
+				AddCurve(outputMinus100Clip, "", typeof(UnityEngine.Animator), "Output" + i, GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: -100f), GenerateKeyFrame(time: 0.01666667f, value: -100f) }));
+				AddCurve(outputMinus100Clip, "test" + i, typeof(UnityEngine.GameObject), "m_IsActive", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: -100f, inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity), GenerateKeyFrame(time: 0.01666667f, value: -100f, inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity) }));
+
+				output100Clip = GenerateClip("Output100");
+				AddCurve(output100Clip, "", typeof(UnityEngine.Animator), "Output" + i, GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 100f), GenerateKeyFrame(time: 0.01666667f, value: 100f) }));
+				AddCurve(output100Clip, "test" + i, typeof(UnityEngine.GameObject), "m_IsActive", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 100f, inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity), GenerateKeyFrame(time: 0.01666667f, value: 100f, inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity) }));
+
+
+				outputMinus1Clip = GenerateClip("Output-1");
+				AddCurve(outputMinus1Clip, "", typeof(UnityEngine.Animator), "Output" + i, GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: -1f), GenerateKeyFrame(time: 0.01666667f, value: -1f) }));
+				AddCurve(outputMinus1Clip, "test" + i, typeof(UnityEngine.GameObject), "m_IsActive", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: -1f, inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity), GenerateKeyFrame(time: 0.01666667f, value: -1f, inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity) }));
+
+				output0Clip = GenerateClip("Output0");
+				AddCurve(output0Clip, "", typeof(UnityEngine.Animator), "Output" + i, GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(inWeight: 0.3333333f, outWeight: 0.3333333f), GenerateKeyFrame(time: 0.01666667f) }));
+				AddCurve(output0Clip, "test" + i, typeof(UnityEngine.GameObject), "m_IsActive", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity), GenerateKeyFrame(time: 0.01666667f, inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity) }));
+
+				output1Clip = GenerateClip("Output1");
+				AddCurve(output1Clip, "", typeof(UnityEngine.Animator), "Output" + i, GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 1f), GenerateKeyFrame(time: 0.01666667f, value: 1f) }));
+				AddCurve(output1Clip, "test" + i, typeof(UnityEngine.GameObject), "m_IsActive", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 1f, inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity), GenerateKeyFrame(time: 0.01666667f, value: 1f, inTangent: float.PositiveInfinity, outTangent: float.PositiveInfinity) }));
+
+				
+				AssetDatabase.CreateAsset(IODMinus100Clip, IODMinus100Name);
+				AssetDatabase.CreateAsset(IOD100Clip, IOD100Name);
+				AssetDatabase.CreateAsset(output0Clip, output0Name);
+				AssetDatabase.CreateAsset(output1Clip, output1Name);
+				AssetDatabase.CreateAsset(outputMinus1Clip, outputMinus1Name);
+				AssetDatabase.CreateAsset(output100Clip, output100Name);
+				AssetDatabase.CreateAsset(outputMinus100Clip, outputMinus100Name);
+			}
+			
+			BlendTree TreeDeltaInput = GenerateBlendTree("Delta = Input", BlendTreeType.Simple1D, blendParameter: i.ToString(), maxThreshold: 100f, minThreshold: -100f, useAutomaticThresholds: false);
+			TreeDeltaInput.children = new ChildMotion[] {
+				GenerateChildMotion(IODMinus100Clip,  threshold: -100f, directBlendParameter: "One"), 
+				GenerateChildMotion(IOD100Clip,  threshold: 100f, directBlendParameter: "One")
+			};
+			trees.Add(TreeDeltaInput);
+			
+			BlendTree TreeDeltaOutput = GenerateBlendTree("Delta = -Output" + i, BlendTreeType.Simple1D, blendParameter: "Output" + i, maxThreshold: 100f, minThreshold: -100f, useAutomaticThresholds: false);
+			TreeDeltaOutput.children = new ChildMotion[] { GenerateChildMotion(IOD100Clip,  threshold: -100f, directBlendParameter: "One"), GenerateChildMotion(IODMinus100Clip,  threshold: 100f, directBlendParameter: "One")};
+			trees.Add(TreeDeltaOutput);
+			
+			BlendTree TreeOutputOutput = GenerateBlendTree("Output = Output", BlendTreeType.Simple1D, blendParameter: "Output" + i, maxThreshold: 100f, minThreshold: -100f, useAutomaticThresholds: false);
+			TreeOutputOutput.children = new ChildMotion[] { GenerateChildMotion(outputMinus100Clip,  threshold: -100f, directBlendParameter: "One"), GenerateChildMotion(output100Clip,  threshold: 100f, directBlendParameter: "One") };
+			trees.Add(TreeOutputOutput);
+
+
+			BlendTree TreeLinearBlend = GenerateBlendTree("Linear Blend", BlendTreeType.Simple1D, blendParameter: "InputOutputDelta" + i, maxThreshold: 0.1f, minThreshold: -0.1f, useAutomaticThresholds: false);
+			TreeLinearBlend.children = new ChildMotion[] {
+				GenerateChildMotion(outputMinus1Clip,  threshold: -0.1f, directBlendParameter: "One"), 
+				GenerateChildMotion(output0Clip,  directBlendParameter: "One"), 
+				GenerateChildMotion(output1Clip,  threshold: 0.1f, directBlendParameter: "One")
+			};
+			trees.Add(TreeLinearBlend);
+		}
+		
+		
+		BlendTree TreeLinearSmoothing = GenerateBlendTree("Linear Smoothing", BlendTreeType.Direct, blendParameter: "Smooth Amount", blendParameterY: "Value", maxThreshold: 1f, minThreshold: 0.2857143f);
+
+		TreeLinearSmoothing.children = new ChildMotion[] {
+			GenerateChildMotion(TreeDeltaTime, directBlendParameter: "StepSize"), 
+			GenerateChildMotion(lastTime1Clip, directBlendParameter: "Time"), 
+		}.Concat(trees.Select((tree, index) => GenerateChildMotion(tree, directBlendParameter: index % 4 == 3 ? "FrameTime" : "One"))).ToArray();
+		
+		AnimatorState StateLinearSmoothingWDOn = GenerateState("Linear Smoothing (WD On)", writeDefaultValues: true, motion: TreeLinearSmoothing);
+
+
+		ChildAnimatorState[] states = new ChildAnimatorState[] {
+			GenerateChildState(new Vector3(280f, 120f, 0f), StateLinearSmoothingWDOn)
+		};
+		
+		AnimatorStateMachine StateMachineLinearSmoothingLayer = GenerateStateMachine("Linear Smoothing Layer", new Vector3(50f, 20f, 0f), new Vector3(50f, 120f, 0f), new Vector3(800f, 120f, 0f), states: states, defaultState: StateLinearSmoothingWDOn);
+		AnimatorControllerLayer LinearSmoothingLayer = GenerateLayer("Linear Smoothing Layer", StateMachineLinearSmoothingLayer);
+        
+		controller.layers = new []{LayerTime, LinearSmoothingLayer};
+		AssetDatabase.CreateAsset(controller, controllerPath + path + layerCount + ".controller");
+		SerializeController(controller);
+		AssetDatabase.StopAssetEditing();
+		return controller;
+	}
+	
+	
+	
 		public static AnimatorController SetupNestedBlendTree(int splitCount, int maxAnims)
 	{
 		string path = "DBTNested/";
@@ -838,4 +1106,6 @@ public class AnimatorHelpers
 
 		controller.parameters = parameters;
 	}
+	
+	
 }

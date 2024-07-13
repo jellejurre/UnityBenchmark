@@ -1,17 +1,17 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.Windows;
-
+using static ControllerGenerationMethods;
 public class AnimationHelper
 {
-	private static string animationPath = "Assets/jellejurre/Benchmarker/Assets/Generated/Animations/";
+	public static string animationPath = "Assets/jellejurre/Benchmarker/Assets/Generated/Animations/";
 	public static void ReadyPath(string folderPath)
 	{
 		if (Directory.Exists(folderPath)) return;
 		Directory.CreateDirectory(folderPath);
 		AssetDatabase.ImportAsset(folderPath);
 	}
-	public static AnimationClip[] GetOrCreateTwoStateToggle(string path, int i)
+	public static AnimationClip[] GetOrCreateTwoStateToggle(string path, int i, string aap = "")
 	{
 		ReadyPath(animationPath);
 		AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(animationPath + "GameObjectOn" + i + ".anim");
@@ -20,23 +20,17 @@ public class AnimationHelper
 		{
 			return new[] { clip, clip2 };
 		}
-
-		AnimationClip onClip = new AnimationClip();
-		AnimationClip offClip = new AnimationClip();
-		onClip.name = "GameObjectOn" + i;
-		offClip.name = "GameObjectOff" + i;
-		EditorCurveBinding binding = new EditorCurveBinding();
-		binding.path = path;
-		binding.type = typeof(GameObject);
-		binding.propertyName = "m_IsActive";
-		AnimationCurve curveOn = AnimationCurve.Linear(0, 1, 1/60f, 1);
-		AnimationCurve curveOff = AnimationCurve.Linear(0, 0, 1/60f, 0);
-		AnimationUtility.SetEditorCurve(onClip, binding, curveOn);
-		AnimationUtility.SetEditorCurve(offClip, binding, curveOff);
-		AssetDatabase.CreateAsset(onClip, animationPath + "GameObjectOn" + i + ".anim");
-		AssetDatabase.CreateAsset(offClip, animationPath + "GameObjectOff" + i + ".anim");
+		AnimationClip onClip = GenerateClip($"Output{i}-100");
+		AddCurve(onClip, "", typeof(GameObject), "m_IsActive", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 1f), GenerateKeyFrame(time: 0.01666667f, value: 1f) }));
+		AnimationClip offClip = GenerateClip($"Output{i}-100");
+		AddCurve(onClip, "", typeof(GameObject), "m_IsActive", GenerateCurve(keys: new Keyframe[] { GenerateKeyFrame(value: 0f), GenerateKeyFrame(time: 0.01666667f, value: 0) }));
+		
+		AssetDatabase.CreateAsset(onClip, animationPath + "GameObjectOn" + i + (aap == "" ? "" : '|' + aap) + ".anim");
+		AssetDatabase.CreateAsset(offClip, animationPath + "GameObjectOff" + i + (aap == "" ? "" : '|' + aap) + ".anim");
 		return new[] { onClip, offClip };
 	}
+	
+
 	
 	public static AnimationClip[] GetOrCreateTwoStateToggleDelayed(string path, int i, int endFrame)
 	{ 

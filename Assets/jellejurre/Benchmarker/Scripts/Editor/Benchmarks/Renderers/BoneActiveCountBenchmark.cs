@@ -17,7 +17,7 @@ public class BoneActiveCountBenchmark : BenchmarkTask1d
 
 	public override string GetParameterName()
 	{
-		return "Bone Count / 25";
+		return "Bone Count";
 	}
 
 	public GameObject[] meshes;
@@ -29,7 +29,7 @@ public class BoneActiveCountBenchmark : BenchmarkTask1d
 		meshes = new GameObject[25];
 		for (int j = 0; j < 25; j++)
 		{
-			meshes[j] = Instantiate(MeshHelper.GetSquareMesh(sideLength, 1, 0, true, value), parent.transform);
+			meshes[j] = Instantiate(MeshHelper.GetSquareMesh(sideLength, 1, 0, true, value/25), parent.transform);
 		}
 		return parent;
 	}

@@ -96,7 +96,10 @@ public class BenchmarkRepository
 			GetOrCreate<DirectBlendTreeSingleActiveBenchmark>("DirectBlendTreeSingleActiveBenchmark.asset"),
 			GetOrCreate<DirectBlendTreeDefaultActiveBenchmark>("DirectBlendTreeDefaultActiveBenchmark.asset"),
 			GetOrCreate<DBTDefaultAnimActiveBenchmark>("DBTDefaultAnimActiveBenchmark.asset"),
-			GetOrCreate<DirectBlendTreeActive2dBenchmark>("DirectBlendTreeActive2dBenchmark.asset")
+			GetOrCreate<DirectBlendTreeActive2dBenchmark>("DirectBlendTreeActive2dBenchmark.asset"),
+            GetOrCreate<DirectBlendTreeSmoothingBenchmark>("DirectBlendTreeSmoothingBenchmark.asset"),
+            GetOrCreate<DirectBlendTreeActiveSmoothingBenchmark>("DirectBlendTreeActiveSmoothingBenchmark.asset"),
+			GetOrCreate<DirectBlendTreeLinearSmoothingBenchmark>("DirectBlendTreeLinearSmoothingBenchmark.asset")
 		};
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(DirectBlendTreeSetups, "DirectBlendTree"));
@@ -115,7 +118,7 @@ public class BenchmarkRepository
 			GetOrCreate<SingleParameterDriverBenchmark>("SingleParameterDriverBenchmark.asset"),
 			GetOrCreate<SinglePlayableLayerControlBenchmark>("SinglePlayableLayerControlBenchmark.asset"),
 			GetOrCreate<SingleLayerControlBenchmark>("SingleLayerControlBenchmark.asset"),
-			GetOrCreate<SingleTrackingControlBenchmark>("SingleTrackingControlBenchmark.asset"),
+			GetOrCreate<SingleTrackingControlBenchmark>("SingleTrackingControlBenchmark.asset")
 		};
 		
 		benchmarkTasks.Add(new BenchmarkTaskGroup(Behaviours, "Behaviours"));
