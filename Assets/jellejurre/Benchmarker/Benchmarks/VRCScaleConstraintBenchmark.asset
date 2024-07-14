@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c079e6d326bf4d4aa2c6d32837bb5ab9, type: 3}
+  m_Name: VRCScaleConstraintBenchmark
+  m_EditorClassIdentifier: 
+  initializationTime: 1
+  benchmarkTime: 1
+  iterationCount: 50
+  baseNum: 1.1475
+  startVal: 2
+  prefab: {fileID: 6875639689166666862, guid: 881d31bded165484dbb2097d1dd64069, type: 3}

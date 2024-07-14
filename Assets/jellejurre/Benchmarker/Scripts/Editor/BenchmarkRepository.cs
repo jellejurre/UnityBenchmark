@@ -135,6 +135,7 @@ public class BenchmarkRepository
 			GetOrCreate<ParentConstraintFakeActive2SourcesBenchmark>("ParentConstraintFakeActive2SourcesBenchmark.asset"),
 			GetOrCreate<ParentConstraintActive2SourcesBenchmark>("ParentConstraintActive2SourcesBenchmark.asset"),
 			GetOrCreate<ParentConstraintBenchmark>("ParentConstraintBenchmark.asset"),
+			GetOrCreate<ParentConstraintDepthBenchmark>("ParentConstraintDepthBenchmark.asset"),
 			GetOrCreate<ParentConstraintSourcesBenchmark>("ParentConstraintSourcesBenchmark.asset"),
 			GetOrCreate<ParentConstraint2dBenchmark>("ParentConstraint2dBenchmark.asset"),
 			GetOrCreate<ParentConstraintOffBenchmark>("ParentConstraintOffBenchmark.asset"),
@@ -143,6 +144,21 @@ public class BenchmarkRepository
 			GetOrCreate<MixedConstraintBenchmark>("MixedConstraintBenchmark.asset"),
 		};
 		benchmarkTasks.Add(new BenchmarkTaskGroup(Constraints, "Constraints"));
+		
+		BenchmarkTask[] VRCConstraints = new BenchmarkTask[]
+		{
+			GetOrCreate<VRCAimConstraintBenchmark>("VRCAimConstraintBenchmark.asset"),
+			GetOrCreate<VRCLookAtConstraintBenchmark>("VRCLookAtConstraintBenchmark.asset"),
+			GetOrCreate<VRCPositionConstraintBenchmark>("VRCPositionConstraintBenchmark.asset"),
+			GetOrCreate<VRCRotationConstraintBenchmark>("VRCRotationConstraintBenchmark.asset"),
+			GetOrCreate<VRCScaleConstraintBenchmark>("VRCScaleConstraintBenchmark.asset"),
+			GetOrCreate<VRCParentConstraintActive2SourcesBenchmark>("VRCParentConstraintActive2SourcesBenchmark.asset"),
+			GetOrCreate<VRCParentConstraintBenchmark>("VRCParentConstraintBenchmark.asset"),
+			GetOrCreate<VRCParentConstraintDepthBenchmark>("VRCParentConstraintDepthBenchmark.asset"),
+			GetOrCreate<VRCParentConstraintSourcesBenchmark>("VRCParentConstraintSourcesBenchmark.asset"),
+			GetOrCreate<VRCParentConstraint2dBenchmark>("VRCParentConstraint2dBenchmark.asset"), 
+		};
+		benchmarkTasks.Add(new BenchmarkTaskGroup(VRCConstraints, "VRCConstraints"));
 
 		BenchmarkTask[] Contacts = new BenchmarkTask[]
 		{

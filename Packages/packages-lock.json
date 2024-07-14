@@ -217,6 +217,12 @@
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       }
     },
+    "dev.jellejurre.ceaddon": {
+      "version": "file:dev.jellejurre.ceaddon",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "dev.jellejurre.controllercodeconverter": {
       "version": "file:dev.jellejurre.controllercodeconverter",
       "depth": 0,
